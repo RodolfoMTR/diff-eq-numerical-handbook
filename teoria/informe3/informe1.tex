@@ -1,0 +1,64 @@
+Este informe presenta la resolución de una ecuación diferencial ordinaria (EDO) de segundo orden utilizando el método de colocación de base. Se emplean funciones base y sus derivadas para aproximar la solución, implementando el procedimiento en Matlab/Octave.
+
+\textbf{Variables:} \\
+\begin{itemize}
+    \item \texttt{u1, u2}: Funciones base utilizadas para aproximar la solución.
+    \item \texttt{du1, du2}: Derivadas de las funciones base.
+    \item \texttt{ddu1, ddu2}: Segundas derivadas de las funciones base.
+    \item \texttt{p, q}: Coeficientes de la EDO.
+    \item \texttt{A}: Matriz de coeficientes del sistema lineal.
+    \item \texttt{b}: Vector de términos independientes.
+    \item \texttt{x}: Puntos de colocación y vector de evaluación.
+    \item \texttt{c}: Coeficientes de la combinación lineal de las bases.
+    \item \texttt{y}: Aproximación de la solución de la EDO.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+%19/06/2025
+%colocacion base
+%bases
+u1=@(x) (1-x).*x;
+u2=@(x) u1(x).*x;
+%derivadas
+du1=@(x) (1-2*x);
+du2=@(x) 2*x-3*x.*x;
+%segundas derivadas
+ddu1=@(x) -2;
+ddu2=@(x) 2-6*x;
+%y''+y'-2y=x y(0)=0=y(1)
+p=1;q=-2;
+A=[];b=[];x=[1/2 4/3];
+A(1,1)=ddu1(x(1))+p*du1(x(1))+q*u1(x(1));
+A(1,2)=ddu2(x(1))+p*du2(x(1))+q*u2(x(1));
+A(2,1)=ddu1(x(2))+p*du1(x(2))+q*u1(x(2));
+A(2,2)=ddu2(x(2))+p*du2(x(2))+q*u2(x(2));
+b(1)=x(1);b(2)=x(2);
+c=inv(A)*b';
+x=0:0.01:1;
+y=c(1)*u1(x)+c(2)*u2(x);
+plot(x,y)
+hold on
+%tarea, hacer que funciones para {1/4 1/2 3/4}
+%u3=(1-x)x^3
+\end{matlabcode}
+
+\textbf{Manual:}
+
+Para ejecutar el programa en Matlab o Octave, siga estos pasos:
+
+\begin{enumerate}
+    \item Copie el código proporcionado en una nueva ventana de script.
+    \item Guarde el archivo con extensión \texttt{.m}, por ejemplo, \texttt{colocacion\_base.m}.
+    \item Ejecute el script en el entorno Matlab/Octave. El programa calculará la aproximación de la solución de la EDO y mostrará la gráfica correspondiente.
+    \item Puede modificar los puntos de colocación en el vector \texttt{x} y agregar nuevas funciones base para experimentar con diferentes aproximaciones.
+\end{enumerate}
+
+El gráfico generado muestra la solución aproximada obtenida mediante el método de colocación de base.
+\textbf{Corrida del Programa:}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{im1.pdf}
+    \caption{Solución de la EDO}
+    \label{fig:solucion_edo}
+\end{figure}

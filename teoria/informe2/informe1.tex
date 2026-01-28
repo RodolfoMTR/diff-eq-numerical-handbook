@@ -1,0 +1,64 @@
+Este programa implementa el método de Runge-Kutta de cuarto orden para resolver un sistema de dos ecuaciones diferenciales acopladas. Se utiliza para aproximar soluciones numéricas de sistemas de la forma:
+\[
+\begin{cases}
+x' = f_1(t,x,y) \\
+y' = f_2(t,x,y)
+\end{cases}
+\]
+Sin embargo, en esta implementación, se asume que la EDO a resolver está definida mediante una función auxiliar llamada \texttt{ff.m}, y se usa el mismo valor de derivada para ambas componentes (lo cual puede corresponder a un modelo simplificado o una EDO escalar replicada).
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{a}, \texttt{b}: Extremos del intervalo en el cual se resuelve la EDO.
+    \item \texttt{x0}, \texttt{y0}: Condiciones iniciales de las variables dependientes \(x\) e \(y\) en \(t = a\).
+    \item \texttt{n}: Número de pasos que se utilizarán en el método (mayor \(n\) → mayor precisión).
+    \item \texttt{k}: Parámetro adicional que se pasa a la función \texttt{ff} (usualmente un parámetro del modelo).
+    \item \texttt{h}: Tamaño del paso, calculado como \(h = \frac{b - a}{n}\).
+    \item \texttt{xt}, \texttt{yt}: Vectores que almacenan los valores aproximados de \(x(t)\) y \(y(t)\).
+    \item \texttt{kkij}: Coeficientes intermedios del método de Runge-Kutta (según el índice correspondiente).
+    \item \texttt{xs}, \texttt{ys}: Aproximaciones actualizadas de \(x\) e \(y\) para el siguiente paso.
+    \item \texttt{yy}: Matriz que contiene los resultados finales: la primera fila corresponde a los valores de \(x\), y la segunda fila a los valores de \(y\).
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+function yy=runge_sis(a,b,x0,y0,n,k)	
+%ff es la ED a resolver definida en el archivo ff.m
+h=(b-a)/n;
+xt=[];yt=[];t=a;
+xt(1)=x0;yt(1)=y0;
+%k11 k21 k31 k41 para la primera
+%k12 k22 k32 k42 para la segunda
+for i=1:n
+    k11=h*x0;
+    k12=h*ff(t,x0,y0,k);
+    k21=h*ff(t+h/2,x0+k11/2,y0+k12/2,k);
+    k22=h*ff(t+h/2,x0+k11/2,y0+k12/2,k);
+    k31=h*ff(t+h/2,x0+k21/2,y0+k22/2,k);
+    k32=h*ff(t+h/2,x0+k21/2,y0+k22/2,k);
+    k41=h*ff(t+h,x0+k31,y0+k32,k);
+    k42=h*ff(t+h,x0+k31,y0+k32,k);
+    xs=x0+(k11+2*(k21+k31)+k41)/6;
+    ys=y0+(k12+2*(k22+k32)+k42)/6;
+    xt(i+1)=xs;yt(i+1)=ys;
+    t=t+h;x0=xs;y0=ys;
+end%i
+yy=[xt;yt];
+
+\end{matlabcode}
+\textbf{Manual:}
+
+1. Este archivo debe guardarse como \texttt{runge\_sis.m}.
+
+2. Debe estar acompañado de un archivo separado llamado \texttt{ff.m} que defina la función de la EDO.
+
+3. No se ejecuta directamente desde la consola, sino que se llama desde otro script o función, por ejemplo:
+\begin{verbatim}
+>> ff = @(t,x,y,k) ...   % definir si no se usa ff.m
+>> runge_sis(0,1,1,0,100,2)
+\end{verbatim}
+4. El resultado es una matriz donde la primera fila contiene los valores de \(x\) y la segunda los de \(y\), evaluados en \(n+1\) puntos uniformemente distribuidos entre \(a\) y \(b\).
+
+
+\textbf{Corrida del Programa:} Este programa no se ejecuta directamente, sino que se llama desde otro programa.

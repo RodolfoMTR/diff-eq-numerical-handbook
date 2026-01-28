@@ -1,0 +1,45 @@
+Es un ejemplo de uso del método de Adams-Bashforth de orden 2 para resolver la ecuación diferencial ordinaria (EDO):
+\begin{equation*}
+    y'=t-ty \quad y(0)=\frac{1}{2}\quad t\in[0,1]
+\end{equation*}
+Este método utiliza el resultado de un método de Runge-Kutta de orden 4 para calcular el $w_1$ y luego aplica el método de Adams-Bashforth para los siguientes pasos. Por ese motivo, se utiliza la función \texttt{runge11.m} y \texttt{ff.m} que se definió en el informe 8 y 10 respectivamente.
+
+Sea crea un nuevo programa con el nombre de \textbf{bashfordos11.m}
+
+\textbf{Código en Matlab/Octave:}
+\begin{matlabcode}
+    %ejecuta adams-bashforth de orden 2
+    y0=1/2; %w1=? por R-K
+    a=0;b=1;n=4;k=1;%k=1 porque es de orden 2
+    %-----------------------
+    h=(b-a)/n;
+    yx=runge11(a,b,h,k,y0);
+    t=a+k*h;
+    for i=2:n
+        Wx=yx(i)+h*(3*ff(t,yx(i))-ff(t-h,yx(i-1)))/2;
+        yx(i+1)=Wx;
+        t=t+h;
+    end
+    yx
+\end{matlabcode}
+\textbf{Manual:}
+\begin{itemize}
+    \item Abrir el archivo \textbf{bashfordos11.m} en Matlab/Octave.
+    \item En el programa \texttt{ff.m} se define la EDO a resolver.
+    \item En las lineas 
+    \begin{verbatim}
+y0=1/2; %w1=? por R-K
+a=0;b=1;n=4;k=1;%k=1 porque es de orden 2
+    \end{verbatim}
+    se definen los parámetros de la EDO a resolver
+    \item En la línea \textbf{n=4;} se define el número de pasos a realizar.
+    \item Ejecutar el script con el comando \textbf{bashfordos11} en la consola de Matlab/Octave.
+\end{itemize}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+    >> bashforthdos11
+
+    yx =
+    
+        0.5000    0.5154    0.5608    0.6280    0.7052
+\end{matlaboutput}

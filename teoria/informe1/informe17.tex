@@ -1,0 +1,70 @@
+Es un program que resuelve un sistema de EDO's de orden 1:
+\begin{equation*}
+    \begin{cases}
+        x' = 2x + 3y \\
+        y' = \frac{2}{3}x + 3y
+    \end{cases}
+\quad x(0)=0, y(0)=1 \quad t\in[0,1]
+\end{equation*}
+Se crea un nuevo programa con el nombre de \textbf{RK\_sistemas.m}.
+
+\textbf{Código en Matlab/Octave:}
+\begin{matlabcode}
+    %R-K de orden 4 para sistemas
+    clear all
+    %format long
+    format shortG
+    %---------------------
+    x1 = @(t,x,y) 2*x+3*y;
+    y1 = @(t,x,y) 2/3*x+3*y;
+    a=0;b=1;n=10;
+    t=a;x0=0;y0=1;
+    %---------------------
+    h=(b-a)/n; %paso
+    xt=[];yt=[];
+    xt(1)=x0;yt(1)=y0;
+    for i=1:n
+        k11=h*x1(t,x0,y0);
+        k12=h*y1(t,x0,y0);
+        k21=h*x1(t+h/2,x0+k11/2,y0+k12/2);
+        k22=h*y1(t+h/2,x0+k11/2,y0+k12/2);
+        k31=h*x1(t+h/2,x0+k21/2,y0+k22/2);
+        k32=h*y1(t+h/2,x0+k21/2,y0+k22/2);
+        k41=h*x1(t+h,x0+k31,y0+k32);
+        k42=h*y1(t+h,x0+k31,y0+k32);
+        xs=x0+(k11+2*(k21+k31)+k41)/6;
+        ys=y0+(k12+2*(k22+k32)+k42)/6;
+        xt(i+1)=xs;yt(i+1)=ys;
+        t=t+h;x0=xs;y0=ys;
+    end%i
+    u=0:h:1;
+    disp([u' xt' yt'])    
+\end{matlabcode}
+\textbf{Manual:}
+\begin{itemize}
+    \item Abrir el archivo \textbf{RK\_sistemas.m} en Matlab/Octave.
+    \item En las lineas 
+    \begin{verbatim}
+    x1 = @(t,x,y) 2*x+3*y;
+    y1 = @(t,x,y) 2/3*x+3*y;
+    a=0;b=1;n=10;
+    t=a;x0=0;y0=1;
+    \end{verbatim}
+    Se define el sistema de EDO's a resolver y sus parámetros.
+    \item Ejecutar el script con el comando \textbf{RK\_sistemas} en la consola de Matlab/Octave.
+\end{itemize}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+    >> RK_sistemas
+    0            0            1
+  0.1      0.38656       1.3629
+  0.2       1.0039       1.8906
+  0.3       1.9696        2.663
+  0.4         3.46       3.7985
+  0.5       5.7381       5.4741
+  0.6        9.197       7.9535
+  0.7       14.424        11.63
+  0.8       22.295       17.089
+  0.9       34.118       25.205
+    1       51.846       37.283
+\end{matlaboutput}

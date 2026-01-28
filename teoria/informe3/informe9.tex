@@ -1,0 +1,212 @@
+Este informe presenta la resolución numérica de una ecuación diferencial parcial parabólica utilizando el método de diferencias finitas implícito. El objetivo es aproximar la solución de la EDP en un dominio definido, mostrando el procedimiento, el código implementado y los resultados obtenidos.
+
+\textbf{Variables:}
+
+\begin{itemize}
+   \item \texttt{ff}: función fuente del problema, definida como \( f(x) = 2x - x^2 \).
+   \item \texttt{a}, \texttt{b}: extremos del intervalo espacial (\( a = 0 \), \( b = 2 \)).
+   \item \texttt{n}: número de subintervalos espaciales (\( n = 10 \)).
+   \item \texttt{h}: tamaño de paso espacial (\( h = (b-a)/n \)).
+   \item \texttt{k}: tamaño de paso temporal (\( k = 1/100 \)).
+   \item \texttt{al}: parámetro de difusión (\( \alpha = 4 \)).
+   \item \texttt{lam}: parámetro auxiliar (\( \lambda = \alpha k / h^2 \)).
+   \item \texttt{A}: matriz de coeficientes del sistema lineal.
+   \item \texttt{bb}: vector del lado derecho en cada paso temporal.
+   \item \texttt{B}: matriz que almacena las soluciones en cada paso temporal.
+   \item \texttt{x}, \texttt{x1}: vectores de nodos espaciales.
+   \item \texttt{c}: solución del sistema en cada iteración temporal.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+%parabolicas 2025/07/03
+%este programa funciona con casi todo
+ff=@(x) 2*x-x.^2;
+a=0;b=2;n=10;h=(b-a)/n;
+k=1/100;al=4;lam=al*k/(h.^2);
+A=[];bb=[];B=A;
+A(1,1)=1+2*lam;A(1,2)=-lam;
+for i=2:n-2
+    A(i-1,i)=-lam;A(i,i)=1+2*lam;A(i,i+1)=-lam;
+end
+i=n-1;A(i,i-1)=-lam;A(i,i)=1+2*lam
+x=a:h:b;x1=x(2:n);bb=ff(x1)';B(:,1)=[0 bb' 0];
+for i=1:10
+    c=A\bb
+    B(:,i+1)=[0 c' 0];
+    bb=c;
+end
+mesh(B)
+\end{matlabcode}
+
+\textbf{Manual:}
+
+Para resolver la ecuación diferencial parcial parabólica por el método de diferencias finitas implícito, se sigue el siguiente procedimiento:
+
+1. **Discretización del dominio:** Se divide el intervalo espacial \([a, b]\) en \(n\) subintervalos de tamaño \(h\), y el tiempo en pasos de tamaño \(k\).
+
+2. **Formulación de la ecuación discreta:** La ecuación parabólica se aproxima usando diferencias finitas centradas en el espacio y hacia adelante en el tiempo, resultando en un sistema lineal para cada paso temporal.
+
+3. **Construcción de la matriz de coeficientes:** Se arma la matriz tridiagonal \(A\) que representa la relación entre los nodos interiores en cada paso temporal, incorporando el parámetro de difusión \(\alpha\) y el parámetro auxiliar \(\lambda\).
+
+4. **Condiciones iniciales y de frontera:** Se establecen los valores iniciales y las condiciones de frontera en los extremos del dominio.
+
+5. **Resolución iterativa:** En cada paso temporal, se resuelve el sistema lineal \(A c = bb\) para obtener la solución en los nodos interiores, actualizando el vector de solución para el siguiente paso.
+
+6. **Almacenamiento y visualización:** Las soluciones en cada paso temporal se almacenan en la matriz \(B\) y se visualizan mediante una gráfica de malla (mesh).
+
+Este método es estable y adecuado para problemas parabólicos, permitiendo aproximar la evolución temporal de la solución en el dominio definido.
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+A =
+
+ Columns 1 through 8:
+
+   3.0000  -1.0000        0        0        0        0        0        0
+        0   3.0000  -1.0000        0        0        0        0        0
+        0        0   3.0000  -1.0000        0        0        0        0
+        0        0        0   3.0000  -1.0000        0        0        0
+        0        0        0        0   3.0000  -1.0000        0        0
+        0        0        0        0        0   3.0000  -1.0000        0
+        0        0        0        0        0        0   3.0000  -1.0000
+        0        0        0        0        0        0        0   3.0000
+        0        0        0        0        0        0        0  -1.0000
+
+ Column 9:
+
+        0
+        0
+        0
+        0
+        0
+        0
+        0
+  -1.0000
+   3.0000
+
+c =
+
+   0.2400
+   0.3601
+   0.4402
+   0.4806
+   0.4817
+   0.4450
+   0.3750
+   0.2850
+   0.2150
+
+c =
+
+   0.1451
+   0.1952
+   0.2256
+   0.2365
+   0.2288
+   0.2049
+   0.1696
+   0.1337
+   0.1162
+
+c =
+
+   0.082651
+   0.102877
+   0.113426
+   0.114729
+   0.107720
+   0.094317
+   0.078090
+   0.064687
+   0.060312
+
+c =
+
+   0.045221
+   0.053013
+   0.056163
+   0.055062
+   0.050456
+   0.043649
+   0.036629
+   0.031797
+   0.030703
+
+c =
+
+   0.024015
+   0.026825
+   0.027462
+   0.026224
+   0.023609
+   0.020371
+   0.017464
+   0.015762
+   0.015488
+
+c =
+
+   1.2463e-02
+   1.3374e-02
+   1.3298e-02
+   1.2431e-02
+   1.1071e-02
+   9.6025e-03
+   8.4368e-03
+   7.8467e-03
+   7.7783e-03
+
+c =
+
+   6.3508e-03
+   6.5892e-03
+   6.3933e-03
+   5.8820e-03
+   5.2146e-03
+   4.5732e-03
+   4.1172e-03
+   3.9148e-03
+   3.8977e-03
+
+c =
+
+   3.1890e-03
+   3.2161e-03
+   3.0592e-03
+   2.7844e-03
+   2.4712e-03
+   2.1991e-03
+   2.0241e-03
+   1.9553e-03
+   1.9510e-03
+
+c =
+
+   1.5826e-03
+   1.5588e-03
+   1.4601e-03
+   1.3212e-03
+   1.1792e-03
+   1.0665e-03
+   1.0004e-03
+   9.7710e-04
+   9.7603e-04
+
+c =
+
+   7.7811e-04
+   7.5175e-04
+   6.9649e-04
+   6.2931e-04
+   5.6673e-04
+   5.2093e-04
+   4.9628e-04
+   4.8841e-04
+   4.8815e-04
+\end{matlaboutput}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{im9.pdf}
+    \caption{Solución de la EDP}
+    \label{fig:solucion_edp9}
+\end{figure}

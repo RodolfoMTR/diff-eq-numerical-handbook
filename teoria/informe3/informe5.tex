@@ -1,0 +1,113 @@
+Este programa implementa el método de diferencias finitas para resolver una ecuación diferencial parcial (EDP) de tipo parabólico, utilizando Matlab/Octave. Se calcula la evolución temporal de la solución en una malla discreta, mostrando los resultados numéricos y la gráfica correspondiente.
+
+\textbf{Variables:} \\
+\begin{itemize}
+  \item \texttt{la}: Parámetro de estabilidad, calculado como $(4 \times 1/65) / (0.5^2)$.
+  \item \texttt{A}: Matriz de coeficientes del sistema lineal generado por el método de diferencias finitas.
+  \item \texttt{n}: Número de divisiones espaciales (nodos menos uno).
+  \item \texttt{h}: Tamaño de paso espacial, calculado como $(2-0)/n$.
+  \item \texttt{x}: Vector de posiciones espaciales.
+  \item \texttt{w0}: Vector de condiciones iniciales en los nodos internos.
+  \item \texttt{B}: Matriz que almacena la evolución de la solución en cada paso temporal.
+  \item \texttt{w1}: Vector de solución en el siguiente paso temporal.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+la=(4*1/65)/(0.5^2);A=[];n=4;h=(2-0)/n;
+A(1,1)=1-2*la;A(1,2)=la;
+for i=2:n-2
+    A(i,i-1)=la;A(i,i)=1-2*la;A(i,i+1)=la;
+end
+A(n-1,n-2)=la;A(n-1,n-1)=1-2*la;
+x=0:h:2;
+w0=x.^2-2*x;w0=w0';B=[];w0=w0(2:n);B(:,1)=w0;
+for i=1:10
+    w1=A*w0
+    B(:,i+1)=w1;
+    w0=w1;
+end
+mesh(B)
+\end{matlabcode}
+
+\textbf{Manual:}
+
+Para ejecutar el programa, siga estos pasos:
+
+\begin{enumerate}
+  \item Abra Matlab o Octave en su computadora.
+  \item Copie el código proporcionado en una nueva ventana de script y guárdelo como \texttt{dif\_finitas.m}.
+  \item Ejecute el script presionando el botón de ejecución o escribiendo \texttt{dif\_finitas} en la consola.
+  \item Observe la salida numérica en la consola, que muestra la evolución de la solución en cada paso temporal.
+  \item Se generará una gráfica de tipo \texttt{mesh} que representa la evolución de la solución en la malla discreta.
+\end{enumerate}
+
+Asegúrese de tener instalado Matlab o GNU Octave y de que el archivo se encuentre en el directorio de trabajo.
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+w1 =
+
+  -0.6269
+  -0.8769
+  -0.6269
+
+w1 =
+
+  -0.5341
+  -0.7538
+  -0.5341
+
+w1 =
+
+  -0.4567
+  -0.6457
+  -0.4567
+
+w1 =
+
+  -0.3908
+  -0.5527
+  -0.3908
+
+w1 =
+
+  -0.3345
+  -0.4730
+  -0.3345
+
+w1 =
+
+  -0.2862
+  -0.4048
+  -0.2862
+
+w1 =
+
+  -0.2450
+  -0.3464
+  -0.2450
+
+w1 =
+
+  -0.2096
+  -0.2965
+  -0.2096
+
+w1 =
+
+  -0.1794
+  -0.2537
+  -0.1794
+
+w1 =
+
+  -0.1535
+  -0.2171
+  -0.1535
+\end{matlaboutput}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{im5.pdf}
+    \caption{Solución de la EDP}
+    \label{fig:solucion_edp5}
+\end{figure}

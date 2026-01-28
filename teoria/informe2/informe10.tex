@@ -1,0 +1,58 @@
+Este programa utiliza una aproximación analítica basada en interpolación polinómica para resolver un problema de valor en la frontera (BVP) de una ecuación diferencial ordinaria. En lugar de resolver directamente la EDO, se supone que la solución puede aproximarse mediante un polinomio, cuyo coeficientes se determinan a partir de valores conocidos de la solución en ciertos puntos del dominio. 
+
+En este caso, se utiliza interpolación polinómica cuadrática con tres puntos dados \((x_1, y_1), (x_2, y_2), (x_3, y_3)\) para obtener un polinomio de segundo grado que se ajusta exactamente a esos puntos. 
+
+Esta técnica proporciona una solución aproximada continua para el intervalo de interés, y es útil cuando se conocen valores exactos o estimados de la solución en algunos nodos.
+
+---
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{A}: Matriz del sistema lineal formado para encontrar los coeficientes del polinomio interpolante, de la forma:
+    \[
+    A =
+    \begin{bmatrix}
+    1 & x_1 & x_1^2 \\
+    1 & x_2 & x_2^2 \\
+    1 & x_3 & x_3^2
+    \end{bmatrix}
+    \]
+    \item \texttt{y}: Vector columna con los valores de la función conocidos en los nodos: \( y = [y_1, y_2, y_3]^T \).
+    \item \texttt{c}: Vector de coeficientes del polinomio cuadrático \( y(x) = c_0 + c_1 x + c_2 x^2 \).
+    \item \texttt{x}: Vector con los valores del dominio para graficar la curva interpolada.
+    \item \texttt{xu}, \texttt{yu}: Vectores que contienen los puntos dados, sobre los cuales se construyó el polinomio interpolante.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+format rat
+A=[1 1 1; 1 2 4; 1 4 16];
+y=[2 4 3]';
+c=inv(A)*y;
+x=0.9:0.01:4.1;
+y=-5/3+9/2*x-5/6*x.^2;
+xu=[1 2 4]; yu=[2 4 3];
+plot(x,y,xu,yu,'.','MarkerSize',20)
+\end{matlabcode}
+
+\textbf{Manual:}
+
+1. Guarde el código en un archivo llamado \texttt{interp\_bvp.m}.
+
+2. Ejecute el archivo en Octave o Matlab con:
+\begin{verbatim}
+>> interp_bvp
+\end{verbatim}
+
+3. El programa resuelve un sistema de tres ecuaciones lineales para hallar los coeficientes del polinomio cuadrático que pasa por los puntos dados.
+
+4. Luego, grafica la curva del polinomio en un intervalo extendido, junto con los puntos usados para construir la interpolación.
+
+5. El uso de \texttt{format rat} permite mostrar los coeficientes en forma de fracción racional exacta.
+
+\textbf{Corrida del Programa:}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.5\textwidth]{im5_2.pdf}
+\end{figure}

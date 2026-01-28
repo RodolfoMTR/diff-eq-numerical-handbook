@@ -1,0 +1,61 @@
+Este programa implementa el método del disparo para resolver un problema de valor en la frontera (boundary value problem, BVP) para un sistema de ecuaciones diferenciales de primer orden. El método convierte el BVP en un problema de valor inicial (IVP), que luego se resuelve usando el método de Runge-Kutta de orden 4.
+
+En particular, el sistema resuelto es:
+\[
+\begin{cases}
+x' = 2x + 3y \\
+y' = \frac{2}{3}x + 3y \\
+x(0) = 0, \quad y(0) = 1, \quad t \in [0,1]
+\end{cases}
+\]
+
+Este tipo de técnica es común cuando se conocen condiciones en los extremos del intervalo y se requiere una solución aproximada de alta precisión.
+
+---
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{a}, \texttt{b}: Extremos del intervalo de integración en el tiempo (\( t \in [a, b] \)).
+    \item \texttt{x}, \texttt{y}: Condiciones iniciales \( x(a) \), \( y(a) \).
+    \item \texttt{n}: Número de subintervalos en los que se divide el intervalo \([a, b]\); define la precisión del método.
+    \item \texttt{h}: Tamaño del paso \( h = \frac{b - a}{n} \).
+    \item \texttt{t}: Variable del tiempo que avanza en cada iteración.
+    \item \texttt{x0}, \texttt{y0}: Valores actuales de las variables \( x \) e \( y \) en cada paso.
+    \item \texttt{xt}, \texttt{yt}: Vectores donde se almacenan los valores aproximados de \( x(t) \) y \( y(t) \).
+    \item \texttt{kij}: Coeficientes intermedios del método de Runge-Kutta para calcular la solución numérica, tanto para \( x \) como para \( y \).
+    \item \texttt{fff(t,x,y)}: Función que representa la derivada de \( x \) en el sistema (es decir, \( x' = f(x,y) \)).
+    \item \texttt{fffg(t,x,y)}: Función que representa la derivada de \( y \) en el sistema (es decir, \( y' = g(x,y) \)).
+    \item \texttt{yy}: Matriz de dos filas: la primera contiene los valores de \( x(t) \), y la segunda los de \( y(t) \).
+\end{itemize}
+
+---
+
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+% x' = 2x   + 3y
+% y' = 2x/3 + 3y ;       x(0)=0;  y(0)=1;  t en [0,1]
+function yy=disparo_r_k_11(a,b,x,y,n)
+h=(b-a)/n; t=a;
+x0=x; y0=y; xt(1)=x0; yt(1)=y0;
+% k11 k12 k13 k14 para fff(t)
+% k21  k22  k23 k24 para fffg(t)
+for i=1:n
+  k11 = h*fff(t, x0,y0);                  k21=h*fffg(t,x0,y0);
+  k12 = h*fff(t+h/2, x0+k11/2,y0+k21/2);  k22=h*fffg(t+h/2,x0+k11/2,y0+k21/2);
+  k13 = h*fff(t+h/2, x0+k12/2,y0+k22/2);  k23=h*fffg(t+h/2,x0+k12/2,y0+k22/2);
+  k14 = h*fff(t+h, x0+k13,y0+k23);        k24=h*fffg(t+h,x0+k13,y0+k23);
+  xs=x0+(k11 + 2*(k12+k13) + k14)/6; xt(i+1)=xs;
+  ys=y0+(k21 + 2*(k22+k23) + k24)/6; yt(i+1)=ys;
+  t=t+h; x0=xs; y0=ys;
+end;
+yy=[xt ; yt];
+
+\end{matlabcode}
+
+\textbf{Manual:}
+Se escribe un nuevo script de nombre disparo\_r\_k\_11.m, que es el programa que resuelve el problema de valor de frontera con el método de Runge-Kutta de orden 4. Este programa usa las funciones fff(t,x,y) y fffg(t,x,y) que se escribieron en los informes siguientes.
+
+\textbf{Corrida del Programa:}
+Este programa no se ejecuta directamente, sino que se llama desde otro programa de nombre llamador.m.

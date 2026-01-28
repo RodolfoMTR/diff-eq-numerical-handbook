@@ -1,0 +1,109 @@
+Este conjunto de programas resuelve un problema de valor en la frontera no lineal (BVP) de la forma:
+
+\[
+y'' + 3y' + 2y = t, \quad y(a)=ya, \quad y(b)=yb,
+\]
+
+utilizando el método del disparo, que transforma el problema BVP en un problema de valor inicial (IVP).  
+La idea es proponer una pendiente inicial \( y'(a) = s \), resolver el sistema con esta condición inicial mediante el método de Runge-Kutta, y ajustar \( s \) iterativamente hasta que la solución cumpla con la condición de frontera en \( b \).
+
+Se implementa una versión no lineal del método del disparo, en la cual se aplica el método de la secante para aproximar la pendiente correcta que satisface la condición final. La no linealidad del problema requiere un ajuste iterativo de esta pendiente hasta obtener el valor deseado en \( y(b) \).
+
+---
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{a}, \texttt{b}: Extremos del intervalo del dominio de la solución.
+    \item \texttt{n}: Número de subintervalos para la discretización del intervalo.
+    \item \texttt{h}: Tamaño del paso, calculado como \( h = (b-a)/n \).
+    \item \texttt{y1}, \texttt{y2}: Pendientes iniciales propuestas para el disparo, que se actualizan con el método de la secante.
+    \item \texttt{k}: Parámetro que representa el control de la no homogeneidad del sistema (presencia del término \( r(t) \)).
+    \item \texttt{runge\_sis\_}: Función externa que aplica el método de Runge-Kutta de cuarto orden para resolver el sistema asociado a una EDO.
+    \item \texttt{y11}, \texttt{y22}: Soluciones del IVP con distintas pendientes iniciales.
+    \item \texttt{ys1}: Nueva pendiente calculada mediante el método de la secante.
+    \item \texttt{ff}: Función que define la EDO como \( y'' = f(t, y, y') \), y que se implementa por separado en \texttt{ff.m}.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave de la función ff.m:}
+\begin{matlabcode}
+% AQUI PONGA LA FUNCION DE y' = ay + r(t)
+% por ejemplo:   y'' +3y' + 2y = t
+% cambio de variable   y1 = y',  y1' = -2*y -3*y1 + t * k
+%   x1=@(t,x,y)    y;
+%   y1=@(t,x,y) -2*y - 3* y1 + t * k;
+%
+function yy=ff(t, y , y1 , k)  % k para r(t) <> 0   o  r(t)=0
+   yy =  -2*y - 3.*y1 + t;
+end
+\end{matlabcode}
+\textbf{Programa en Matlab/Octave de Disparo\_No\_lineal.m:}
+\begin{matlabcode}
+% METODO DEL DISPARO NO LINEAL
+% por ejemplo:   y'' +0y' + y^2/100 = t;  y(a)=ya ,  y(b)=yb;
+% cambio de variable   y1 = y',  y1' = -2*y -3*y1 + t * k
+%   x1=@(t,x,y)    y;
+%   y1=@(t,x,y) x*x/10  + t ;
+%
+% % llama a funtion yy=runge_sis_(a,b,x,y,n,k)
+%
+%  y(t)  =  y1(t) + (yb - y1(b))*y2(t)/y2(b) ,  es la solucion
+%
+clear all;
+a=0; b=1; n=8;  h=(b-a)/n;  err1=.00000001;
+x=0; y=01/2;    B=y;% fronteras
+% ingresar pendiente 1  y 2
+y1=.3; y2=4; %y11=y22=[ ];
+k=1;  %   pendiente yn
+d=runge_sis_(a,b,x,y1,n,k);
+y11=d(1,:);
+
+for i=1: 8000
+
+
+   % para y2(t)   no homogeneo  r(t) <> 0
+   % pendiente yn1
+   d=runge_sis_(a,b,x,y2,n,k);
+   y22=d(1,:);
+   % SOLUCION
+   ys1 = y2 - (y22(n+1) - B)/(y22(n+1)-y11(n+1))*(y2-y1);
+   printf('%d  yn=%f  yn+1 =%f y(b)=%f \n',i , y2, ys1, y22(n+1));
+   if abs(ys1-y2)<err1 break; end;
+   y1=y2; y2=ys1; y11=y22;
+end; ys1, d(1, n+1)
+i, y22
+t=a:h:b;
+plot(t,y22);
+grid;
+\end{matlabcode}
+
+\textbf{Manual:}
+
+1. Guarde los archivos como \texttt{ff.m} y \texttt{Disparo\_No\_lineal.m}.
+
+2. Asegúrese de tener la función \texttt{runge\_sis\_} correctamente implementada y disponible en el mismo directorio.
+
+3. Ejecute el programa principal con:
+\begin{verbatim}
+>> Disparo_No_lineal
+\end{verbatim}
+
+4. El script ajusta la pendiente inicial para que la solución del problema de valor inicial cumpla con la condición de frontera en \( t = b \).
+
+5. Al finalizar, se grafica la solución aproximada.
+
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+1  yn=4.000000  yn+1 =1.788797 y(b)=1.014180 
+2  yn=1.788797  yn+1 =1.788797 y(b)=0.500000 
+ys1 = 1.7888
+ans = 0.5000
+i = 2
+y22 =
+
+        0   0.1858   0.3103   0.3911   0.4414   0.4711   0.4874   0.4957   0.5000
+\end{matlaboutput}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.5\textwidth]{im6_2.pdf}
+\end{figure}

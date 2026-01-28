@@ -1,0 +1,108 @@
+Este programa resuelve un problema de valor en la frontera no lineal mediante el método de diferencias finitas iterativo.  
+La ecuación diferencial a resolver es:
+\[
+y'' - \frac{y^2}{10} = t,\quad \text{con } y(0) = 0,\quad y(1) = 1
+\]
+Este problema no es lineal debido al término \( y^2 \), por lo que se emplea una linealización iterativa, donde se sustituye \( y^2 \) por una función \( s(t)y \), y se actualiza \( s(t) \) con el valor de \( y \) obtenido en cada iteración. De esta forma, en cada paso se resuelve un sistema lineal que aproxima la solución del problema no lineal.
+
+---
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{p}: Coeficiente del término \( y' \), que es cero en este caso.
+    \item \texttt{a}, \texttt{b}: Extremos del intervalo en el que se resuelve la EDO.
+    \item \texttt{n}: Número de subintervalos para la discretización. Esto define \( n+1 \) nodos.
+    \item \texttt{h}: Tamaño del paso, calculado como \( h = (b - a)/n \).
+    \item \texttt{ya}, \texttt{yb}: Condiciones de frontera \( y(a) = ya \) y \( y(b) = yb \).
+    \item \texttt{st}: Vector que almacena los valores de la función \( s(t) \), que se actualiza con los valores de \( y \) en cada iteración.
+    \item \texttt{u}: Término auxiliar igual a \( h^2 \), utilizado para simplificar expresiones.
+    \item \texttt{A}: Matriz del sistema lineal generado por el método de diferencias finitas.
+    \item \texttt{bb}: Vector del segundo miembro del sistema, dependiendo de la función fuente \( r(x) = t \) y de las condiciones de frontera.
+    \item \texttt{cc}: Solución del sistema lineal en cada iteración; representa la aproximación de la solución \( y \) en los nodos interiores.
+    \item \texttt{t}: Vector de nodos del intervalo \([a, b]\).
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+%No lineal Iteraciones Metodo de diferencias finitas
+%y''-y^2/10=t  y(0)=0; y(1)=1
+%y''-s(t)y/10=t; donde s(t)=y
+p=0;n=4;%q=st
+a=0;b=1;h=(b-a)/n;A=[];st=a:h:b;st=st(2:n);
+ya=0;yb=1;u=h.^2;
+A(1,1)=st(1)*u-2;A(1,2)=1+0*h/2;bb(1)=(a+h)*u-ya;
+for j=1:5
+for i=2:(n-2)
+        A(i,i-1)=1;A(i,i)=st(i)*u-2;A(i,i+1)=1;
+        bb(i)=u*(i*h);
+end%i
+A(n-1,n-2)=1;A(n-1,n-1)=st(n-1)*u-2;
+bb(n-1)=(a+(n-1)*h)*u-yb;
+[A,bb'] 
+cc=A\bb';
+if norm(cc-st)<0.01 break;end
+st=cc/10;
+end;%j
+cc=[ya cc' yb]
+t=a:h:b;
+plot(t,cc);
+\end{matlabcode}
+\textbf{Manual:}
+
+1. Guarde el programa en un archivo llamado \texttt{nolineal.m}.
+
+2. Ejecute el script desde la consola de Octave o Matlab con:
+\begin{verbatim}
+>> nolineal
+\end{verbatim}
+
+3. El código implementa un proceso iterativo para resolver una EDO no lineal utilizando el método de diferencias finitas.
+
+4. En cada iteración se linealiza la ecuación con una estimación de \( s(t) = y \), se forma el sistema lineal correspondiente, y se resuelve. El proceso continúa hasta que el cambio entre iteraciones es menor a 0.01.
+
+5. Al final, se grafica la solución aproximada en el intervalo \([0,1]\).
+
+
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+octave:10> nolineal
+ans =
+
+  -1.9844   1.0000        0   0.0156
+   1.0000  -1.9688   1.0000   0.0312
+        0   1.0000  -1.9531  -0.9531
+
+ans =
+
+  -1.9844   1.0000        0   0.0156
+   1.0000  -1.9971   1.0000   0.0312
+        0   1.0000  -1.9954  -0.9531
+
+ans =
+
+  -1.9844   1.0000        0   0.0156
+   1.0000  -1.9972   1.0000   0.0312
+        0   1.0000  -1.9956  -0.9531
+
+ans =
+
+  -1.9844   1.0000        0   0.0156
+   1.0000  -1.9972   1.0000   0.0312
+        0   1.0000  -1.9956  -0.9531
+
+ans =
+
+  -1.9844   1.0000        0   0.0156
+   1.0000  -1.9972   1.0000   0.0312
+        0   1.0000  -1.9956  -0.9531
+
+cc =
+
+        0   0.2148   0.4419   0.6991   1.0000
+
+\end{matlaboutput}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{im4_2.pdf}
+\end{figure}

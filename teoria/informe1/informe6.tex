@@ -1,0 +1,74 @@
+Es un método numérico para resolver ecuaciones diferenciales ordinarias (EDO) de la forma
+\begin{equation*}
+    y' = f(t,y), \quad y(t_0) = y_0\quad  a\leq t\leq b
+\end{equation*}
+donde $f(t,y)$ es una función continua y $y_0$ es el valor inicial de la solución en el punto $t_0$. El método Runge-Kutta de orden 3 es una extensión del método de Runge-Kutta de orden 2, proporcionando una mayor precisión en la aproximación de la solución.
+
+Para $n=3$, es posible efectuar un desarrollo similar al del método de segundo orden. Una versión comun que se obtiene es
+\begin{equation}
+    y_{i+1}=y_i+\frac{1}{6}(k_1+4k_2+k_3)h
+\end{equation}
+donde
+\begin{align*}
+    k_1&=f(x_i,y_i)\\
+    k_2&=f(x_i+\frac{1}{2}h,y_i+\frac{1}{2}k_1h)\\
+    k_3&=f(x_i+h,y_i-k_1h+2k_2h)
+\end{align*}
+Sea la EDO que no se puede resolver analiticamente
+\begin{equation*}
+    y'=t-ty^{1.5}
+\end{equation*}
+Entonces utilizando Runge-Kutta de orden 3, creamos un archivo en matlab/octave llamado RKorden3.m, y escribimos el siguiente codigo.
+
+\textbf{Código en Matlab/Octave:}
+\begin{matlabcode}
+    %Runge Kutta de orden 3
+    y1 = @(t,y) t-y^(3/2); %Ec. Diff. Ordinaria a solucionar
+    y0=1; %condición inicial
+    a=1;b=2; %Intervalos
+    N=8;
+    h = (b-a)/N;
+    yt=zeros(1,N);yt(1)=y0;
+    a1=a;
+    for i=1:N
+        k1=h*y1(a1,y0);
+        k2=h*y1(a1+h/2,y0+k1/2);
+        k3=h*y1(a1+h,y0+k1+2*k2);
+        yp=y0+(k1+4*k2+k3)/6;yt(i+1)=yp;
+        fprintf('%d| yn=%f| k1=%f| k2=%f| k3=%f y_n+1=%f\n',i,y0,k1,k2,k3,yp)
+        y0=yp; a1=a1+h;
+    end
+      t=a:h:b;
+      pa=polyfit(t,yt,4); % minimos cuadrados
+      pt=polyval(pa,t);
+      plot(t,pt,t,yt,'.r','MarkerSize',10)
+\end{matlabcode}
+\textbf{Manual:}
+\begin{itemize}
+    \item Abrir el archivo \textbf{Rkorden3.m} en Matlab/Octave.
+    \item En las lineas 
+    \begin{verbatim}
+y1 = @(t,y) t-y^(3/2); %Ec. Diff. Ordinaria a solucionar
+y0=1; %condición inicial
+a=1;b=2; %Intervalos
+    \end{verbatim}
+    Se ingresa la ecuación diferencial ordinaria a solucionar, la condición inicial y el intervalo de solución.
+    \item En la línea \textbf{N=8;} se define el número de pasos a realizar.
+    \item Ejecutar el script con el comando \textbf{Rkorden3} en la consola de Matlab/Octave.
+\end{itemize}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+    >> RKorden3
+    1| yn=1.000000| k1=0.000000| k2=0.007812| k3=0.012684 y_n+1=1.007322
+    2| yn=1.007322| k1=0.014250| k2=0.020719| k3=0.019251 y_n+1=1.026718
+    3| yn=1.026718| k1=0.026207| k2=0.031522| k3=0.024512 y_n+1=1.056186
+    4| yn=1.056186| k1=0.036193| k2=0.040504| k3=0.028619 y_n+1=1.093991
+    5| yn=1.093991| k1=0.044469| k2=0.047899| k3=0.031722 y_n+1=1.138622
+    6| yn=1.138622| k1=0.051252| k2=0.053909| k3=0.033965 y_n+1=1.188764
+    7| yn=1.188764| k1=0.056736| k2=0.058714| k3=0.035482 y_n+1=1.243277
+    8| yn=1.243277| k1=0.061090| k2=0.062477| k3=0.036398 y_n+1=1.301176
+\end{matlaboutput}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width = 10cm]{figure2_info5.pdf}
+\end{figure}

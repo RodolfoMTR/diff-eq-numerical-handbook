@@ -1,0 +1,59 @@
+Es un ejemplo de uso del método de Moulton para resolver la ecuación diferencial ordinaria (EDO):
+\begin{equation*}
+    y'=t-ty \quad y(0)=\frac{1}{2}\quad t\in[0,1]
+\end{equation*}
+Este método es un método implícito de predicción-corrección que utiliza el valor de la función en el paso siguiente para corregir el valor actual. Por ese motivo, se utiliza la función \texttt{runge11.m} que se definió en el informe 8.
+
+Sea crea un nuevo programa con el nombre de \textbf{moulton.m}.
+
+\textbf{Código en Matlab/Octave:}
+\begin{matlabcode}
+    clear all;
+    y0=1/2; %condición inicial
+    a=0;b=1;% intervalo
+    n=4; % número de pasos
+    %----------------------
+    t=a;
+    h=(b-a)/n;
+    yt=[];yt(1)=y0;
+    u=runge11(a,b,h,1,y0);
+    yt=u;
+    t=a+h;
+    y0=yt(2);
+    for i=2:n
+      v=y0;
+      for k=1:5
+        v1=y0+h/12*(5*ff(t+h,v)+8*ff(t,yt(i))-ff(t-h,yt(i-1)));
+        if abs(v1-v)<0.0001 
+            break
+        end
+        v=v1;
+      end%k
+      y0=v1;t=t+h;yt(i+1)=y0;
+    end%i
+    u=a:h:b;
+    disp([u',yt']);
+\end{matlabcode}
+\textbf{Manual:}
+\begin{itemize}
+    \item Abrir el archivo \textbf{moulton.m} en Matlab/Octave.
+    \item En el programa \texttt{ff.m} se define la EDO a resolver.
+    \item En las lineas 
+    \begin{verbatim}
+    y0=1/2; %condición inicial
+    a=0;b=1;% intervalo
+    n=4; % número de paso
+    \end{verbatim}
+    se definen los parámetros de la EDO a resolver
+    \item En la línea \textbf{n=4;} se define el número de pasos a realizar.
+    \item Ejecutar el script con el comando \textbf{moulton} en la consola de Matlab/Octave.
+\end{itemize}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+>> Moulton
+    0    0.5000
+0.2500    0.5154
+0.5000    0.5586
+0.7500    0.6223
+1.0000    0.6965
+\end{matlaboutput}

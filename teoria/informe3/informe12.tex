@@ -1,0 +1,93 @@
+El método Crank-Nicolson es un esquema numérico implícito para resolver ecuaciones en derivadas parciales (EDP) de tipo parabolico, como la ecuación de difusión o calor. Es una combinación de los métodos explícito e implícito, usando el promedio entre ambos en cada paso temporal. Para $\theta=1/2$, se obtiene el método clásico de Crank-Nicolson, que es estable y de segundo orden en el tiempo y espacio.
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item $a$, $b$: Extremos del intervalo espacial.
+    \item $n$: Número de subintervalos espaciales.
+    \item $h$: Tamaño de paso espacial, $h=(b-a)/n$.
+    \item $tt$: Tiempo final de la simulación.
+    \item $k$: Tamaño de paso temporal.
+    \item $\alpha$: Parámetro de difusión ($\alpha^2$).
+    \item $L$: Número de Fourier, $L=\alpha k/h^2$.
+    \item $x$: Vector de nodos espaciales.
+    \item $w0$: Condición inicial en los nodos.
+    \item $A$, $B$: Matrices del sistema lineal para el método.
+    \item $BB$: Matriz que almacena la solución en cada paso temporal.
+    \item $m$: Número de pasos temporales.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+%Crank_nicolson general para theta=1/2
+a=0;b=1;n=10;h=(b-a)/n;
+tt=1;k=1/12; alp=1; %alp: alpha cuadrado
+L=alp*k/h^2;BB=A=B=[];bb=[];
+x=a:h:b;w0=x-x.^2; BB(:,1)=w0;
+w0=w0(2:n)';
+A(1,1)=1+L;A(1,2)=-L/2;
+B(1,1)=1-L;B(1,2)=L/2;
+for i=2:n-2
+    A(i,i-1)=-L/2;A(i,i)=1+L;A(i,i+1)=-L/2;
+    B(i,i-1)=L/2;B(i,i)=1-L;B(i,i+1)=L/2;
+end
+i=n-1;
+A(i,i-1)=-L/2;A(i,i)=1+L;
+B(i,i-1)=L/2;B(i,i)=1-L;
+m=ceil(tt/k);
+for i=1:m
+    wx=B*w0;wx=A\wx;BB(:,i+1)=[0 wx' 0]';
+    w0=wx;
+end
+BB
+mesh(BB)
+\end{matlabcode}
+
+\textbf{Manual:}
+
+Para ejecutar el programa, siga estos pasos:
+
+1. Copie el código Matlab/Octave en un archivo llamado `crank\_nicolson.m`.
+2. Abra Matlab o GNU Octave y navegue hasta el directorio donde guardó el archivo.
+3. Ejecute el archivo escribiendo `crank\_nicolson` en la consola.
+4. El resultado será la matriz `BB`, que contiene la solución numérica en cada paso temporal, y una gráfica de la evolución de la solución.
+
+La matriz `BB` muestra cómo la condición inicial evoluciona en el tiempo bajo el método Crank-Nicolson. La gráfica generada (`mesh(BB)`) permite visualizar la difusión de la solución en el dominio espacio-tiempo.
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+BB =
+
+ Columns 1 through 8:
+
+        0        0        0        0        0        0        0        0
+   0.0900   0.0272   0.0181   0.0033   0.0043  -0.0002   0.0014  -0.0005
+   0.1600   0.0594   0.0290   0.0102   0.0052   0.0019   0.0008   0.0005
+   0.2100   0.0875   0.0368   0.0158   0.0062   0.0030   0.0009   0.0007
+   0.2400   0.1061   0.0419   0.0191   0.0073   0.0034   0.0013   0.0006
+   0.2500   0.1126   0.0437   0.0201   0.0077   0.0035   0.0015   0.0005
+   0.2400   0.1061   0.0419   0.0191   0.0073   0.0034   0.0013   0.0006
+   0.2100   0.0875   0.0368   0.0158   0.0062   0.0030   0.0009   0.0007
+   0.1600   0.0594   0.0290   0.0102   0.0052   0.0019   0.0008   0.0005
+   0.0900   0.0272   0.0181   0.0033   0.0043  -0.0002   0.0014  -0.0005
+        0        0        0        0        0        0        0        0
+
+ Columns 9 through 13:
+
+        0        0        0        0        0
+   0.0006  -0.0004   0.0003  -0.0003   0.0002
+   0.0000   0.0002  -0.0001   0.0001  -0.0001
+   0.0000   0.0002  -0.0001   0.0001  -0.0000
+   0.0002   0.0001   0.0001  -0.0000   0.0000
+   0.0003   0.0000   0.0001  -0.0000   0.0000
+   0.0002   0.0001   0.0001  -0.0000   0.0000
+   0.0000   0.0002  -0.0001   0.0001  -0.0000
+   0.0000   0.0002  -0.0001   0.0001  -0.0001
+   0.0006  -0.0004   0.0003  -0.0003   0.0002
+        0        0        0        0        0
+\end{matlaboutput}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{im12.pdf}
+    \caption{Solución de la EDP con Crank-Nicolson}
+    \label{fig:solucion_edp12}
+\end{figure}

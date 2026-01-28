@@ -1,0 +1,11 @@
+Es una función que define la ecuación diferencial ordinaria (EDO) a resolver. Esta función se llama desde el programa \texttt{runge11} y tiene la siguiente forma:
+\begin{equation*}
+    y'=t-ty \quad y(0)=\frac{1}{2}\quad t\in[0,1]
+\end{equation*}
+El código siguiente se guarda como \texttt{ff.m}
+\begin{matlabcode}
+function y1=ff(t,y)
+    y1=t-t*y;
+end
+\end{matlabcode}
+\textbf{Este programa no se ejecuta directamente, sino que se llama desde otro programa. Es usado por \texttt{runge11.m}, que se detalla en el informe 8. En el informe 10, se presenta un ejemplo de su uso.}

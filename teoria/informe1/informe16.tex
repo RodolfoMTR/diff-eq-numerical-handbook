@@ -1,0 +1,37 @@
+Es un program que gráfica las soluciones de un sistema de EDO's de orden 1:
+\begin{equation*}
+    \begin{cases}
+        x' = 2x + 3y \\
+        y' = \frac{2}{3}x + 3y
+    \end{cases}
+\quad x(0)=0, y(0)=1 \quad t\in[0,1]
+\end{equation*}
+Sea crea un nuevo programa con el nombre de \textbf{runge4sistema.m}.
+
+\textbf{Código en Matlab/Octave:}
+\begin{matlabcode}
+    format long G
+    t=0:0.01:1;%dominio
+    x=@(t) exp(4*t)-exp(t); %soluciones
+    y=@(t) 2/3*exp(4*t)+1/3*exp(t); %soluciones
+    plot(t,x(t),'r',t,y(t),'b')
+    u=0:1/2:1;
+    [u' x(u)' y(u)']
+\end{matlabcode}
+\textbf{Manual:}
+\begin{itemize}
+    \item Abrir el archivo \textbf{runge4sistema.m} en Matlab/Octave.
+    \item Ejecutar el script con el comando \textbf{runge4sistema} en la consola de Matlab/Octave.
+\end{itemize}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+    ans =
+
+    0                         0                         1
+  0.5          5.74033482823052          5.47561115618714
+    1          51.8798682046852          37.3048606315825
+\end{matlaboutput}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width = 10cm]{grafica17.pdf}
+\end{figure}

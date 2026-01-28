@@ -1,0 +1,32 @@
+Este programa define la función \texttt{ff}, que representa una ecuación diferencial ordinaria (EDO) de segundo orden reducida a un sistema de primer orden. Esta función es utilizada por otro programa (como \texttt{runge\_sis.m}) que implementa un método numérico para resolver sistemas de EDO, como Runge-Kutta. La ecuación definida modela una relación entre la variable dependiente \( y(t) \), su derivada \( y'(t) \), el tiempo \( t \), y un parámetro \( k \). Es un modelo lineal típico en problemas de dinámica o control.
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{t}: Variable independiente (tiempo).
+    \item \texttt{y}: Variable dependiente, que representa la función \( y(t) \).
+    \item \texttt{y1}: Derivada de \( y \) con respecto a \( t \), es decir, \( y'(t) \).
+    \item \texttt{k}: Parámetro que puede controlar la intensidad o el comportamiento del término externo \( t \cdot k \) en la ecuación.
+    \item \texttt{yy}: Resultado de la evaluación de la ecuación diferencial en el punto \((t, y, y')\), es decir, el valor de \( y''(t) \).
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+function yy=ff(t,y,y1,k)
+        yy=-2*y-3*y1+t*k;
+end
+\end{matlabcode}
+\textbf{Manual:}
+
+1. Este archivo debe guardarse con el nombre \texttt{ff.m}.
+
+2. Define la función que representa la ecuación diferencial a resolver.
+
+3. No se ejecuta de forma autónoma desde la consola, sino que debe ser llamada desde otro programa (como \texttt{runge\_sis.m}) que implemente el método numérico para resolver sistemas de EDOs.
+
+4. El valor retornado, \texttt{yy}, representa la derivada de segundo orden \( y''(t) \) para la ecuación:
+   \[
+   y''(t) = -2y(t) - 3y'(t) + tk
+   \]
+
+\textbf{Corrida del Programa:} Este programa no se ejecuta directamente, sino que se llama desde otro programa de nombre runge\_sis.m.

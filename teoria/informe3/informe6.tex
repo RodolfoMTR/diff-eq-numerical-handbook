@@ -1,0 +1,538 @@
+Este programa implementa el método de diferencias finitas para resolver una ecuación diferencial parcial (EDP) de tipo parabólico, simulando la evolución temporal de una función en un dominio discreto. Utiliza una malla espacial y temporal para aproximar la solución numérica.
+
+\textbf{Variables:} \\
+\begin{itemize}
+  \item \texttt{la}: Parámetro de estabilidad, relacionado con el paso temporal y espacial.
+  \item \texttt{A}: Matriz de coeficientes del esquema de diferencias finitas.
+  \item \texttt{n}: Número de intervalos espaciales.
+  \item \texttt{h}: Tamaño del paso espacial.
+  \item \texttt{x}: Vector de puntos espaciales.
+  \item \texttt{w0}: Vector de valores iniciales de la función.
+  \item \texttt{B}: Matriz que almacena la evolución de la solución en el tiempo.
+  \item \texttt{w1}: Vector de la solución en el siguiente paso temporal.
+\end{itemize}
+
+\textbf{¿Qué hace?:} \\
+Construye la matriz de diferencias finitas, inicializa la condición inicial, y realiza iteraciones temporales para calcular la evolución de la solución. Finalmente, muestra los resultados numéricos y grafica la solución aproximada de la EDP.
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+la=(4*1/1600)/(0.1^2);A=[];n=10;h=(2-0)/n;
+A(1,1)=1-2*la;A(1,2)=la;
+for i=2:n-2
+    A(i,i-1)=la;A(i,i)=1-2*la;A(i,i+1)=la;
+end
+A(n-1,n-2)=la;A(n-1,n-1)=1-2*la;
+x=0:h:2;
+w0=x.^2-2*x;w0=w0';B=[];w0=w0(2:n);B(:,1)=w0;
+for i=1:40
+    w1=A*w0
+    B(:,i+1)=w1;
+    w0=w1;
+end
+mesh(B)
+\end{matlabcode}
+
+\textbf{Manual:}
+
+\textbf{1. Ingreso de datos:} \\
+El usuario debe definir los parámetros del problema, como el número de intervalos espaciales (\texttt{n}), el tamaño del paso espacial (\texttt{h}), y la condición inicial (\texttt{w0}). Estos valores pueden modificarse directamente en el código.
+
+\textbf{2. Ejecución:} \\
+Ejecute el programa en Matlab u Octave. El código construye la matriz de diferencias finitas, inicializa la condición inicial y realiza las iteraciones temporales para calcular la evolución de la solución.
+
+\textbf{3. Visualización:} \\
+Al finalizar, el programa muestra los resultados numéricos de cada paso temporal y grafica la solución aproximada usando la función \texttt{mesh}, permitiendo observar la evolución de la EDP en el tiempo.
+
+\textbf{4. Interpretación:} \\
+Analice la gráfica y los valores obtenidos para comprender el comportamiento de la solución en el dominio discreto. Puede modificar los parámetros para observar diferentes escenarios y verificar la estabilidad del método.
+\textbf{Corrida del Programa:}
+\begin{multicols*}{3}
+\begin{matlaboutput}
+w1 =
+
+  -0.3400
+  -0.6200
+  -0.8200
+  -0.9400
+  -0.9800
+  -0.9400
+  -0.8200
+  -0.6200
+  -0.3400
+
+w1 =
+
+  -0.3250
+  -0.6000
+  -0.8000
+  -0.9200
+  -0.9600
+  -0.9200
+  -0.8000
+  -0.6000
+  -0.3250
+
+w1 =
+
+  -0.3125
+  -0.5813
+  -0.7800
+  -0.9000
+  -0.9400
+  -0.9000
+  -0.7800
+  -0.5812
+  -0.3125
+
+w1 =
+
+  -0.3016
+  -0.5637
+  -0.7603
+  -0.8800
+  -0.9200
+  -0.8800
+  -0.7603
+  -0.5637
+  -0.3016
+
+w1 =
+
+  -0.2917
+  -0.5473
+  -0.7411
+  -0.8601
+  -0.9000
+  -0.8601
+  -0.7411
+  -0.5473
+  -0.2917
+
+w1 =
+
+  -0.2827
+  -0.5319
+  -0.7224
+  -0.8403
+  -0.8800
+  -0.8403
+  -0.7224
+  -0.5319
+  -0.2827
+
+w1 =
+
+  -0.2743
+  -0.5172
+  -0.7042
+  -0.8208
+  -0.8602
+  -0.8208
+  -0.7042
+  -0.5172
+  -0.2743
+
+w1 =
+
+  -0.2665
+  -0.5032
+  -0.6866
+  -0.8015
+  -0.8405
+  -0.8015
+  -0.6866
+  -0.5032
+  -0.2665
+
+w1 =
+
+  -0.2590
+  -0.4899
+  -0.6695
+  -0.7825
+  -0.8210
+  -0.7825
+  -0.6695
+  -0.4899
+  -0.2590
+
+w1 =
+
+  -0.2520
+  -0.4771
+  -0.6528
+  -0.7639
+  -0.8017
+  -0.7639
+  -0.6528
+  -0.4771
+  -0.2520
+
+w1 =
+
+  -0.2453
+  -0.4648
+  -0.6367
+  -0.7456
+  -0.7828
+  -0.7456
+  -0.6367
+  -0.4648
+  -0.2453
+
+w1 =
+
+  -0.2388
+  -0.4529
+  -0.6209
+  -0.7277
+  -0.7642
+  -0.7277
+  -0.6209
+  -0.4529
+  -0.2388
+
+w1 =
+
+  -0.2326
+  -0.4414
+  -0.6056
+  -0.7101
+  -0.7459
+  -0.7101
+  -0.6056
+  -0.4414
+  -0.2326
+
+w1 =
+
+  -0.2267
+  -0.4302
+  -0.5907
+  -0.6929
+  -0.7280
+  -0.6929
+  -0.5907
+  -0.4302
+  -0.2267
+
+w1 =
+
+  -0.2209
+  -0.4194
+  -0.5761
+  -0.6761
+  -0.7105
+  -0.6761
+  -0.5761
+  -0.4194
+  -0.2209
+
+w1 =
+
+  -0.2153
+  -0.4090
+  -0.5620
+  -0.6597
+  -0.6933
+  -0.6597
+  -0.5620
+  -0.4090
+  -0.2153
+
+w1 =
+
+  -0.2099
+  -0.3988
+  -0.5482
+  -0.6437
+  -0.6765
+  -0.6437
+  -0.5482
+  -0.3988
+  -0.2099
+
+w1 =
+
+  -0.2046
+  -0.3889
+  -0.5347
+  -0.6280
+  -0.6601
+  -0.6280
+  -0.5347
+  -0.3889
+  -0.2046
+
+w1 =
+
+  -0.1996
+  -0.3793
+  -0.5216
+  -0.6127
+  -0.6441
+  -0.6127
+  -0.5216
+  -0.3793
+  -0.1996
+
+w1 =
+
+  -0.1946
+  -0.3699
+  -0.5088
+  -0.5978
+  -0.6284
+  -0.5978
+  -0.5088
+  -0.3699
+  -0.1946
+
+w1 =
+
+  -0.1898
+  -0.3608
+  -0.4963
+  -0.5832
+  -0.6131
+  -0.5832
+  -0.4963
+  -0.3608
+  -0.1898
+
+w1 =
+
+  -0.1851
+  -0.3519
+  -0.4842
+  -0.5689
+  -0.5981
+  -0.5689
+  -0.4842
+  -0.3519
+  -0.1851
+
+w1 =
+
+  -0.1805
+  -0.3433
+  -0.4723
+  -0.5550
+  -0.5835
+  -0.5550
+  -0.4723
+  -0.3433
+  -0.1805
+
+w1 =
+
+  -0.1761
+  -0.3348
+  -0.4607
+  -0.5415
+  -0.5693
+  -0.5415
+  -0.4607
+  -0.3348
+  -0.1761
+
+w1 =
+
+  -0.1718
+  -0.3266
+  -0.4494
+  -0.5282
+  -0.5554
+  -0.5282
+  -0.4494
+  -0.3266
+  -0.1718
+
+w1 =
+
+  -0.1675
+  -0.3186
+  -0.4384
+  -0.5153
+  -0.5418
+  -0.5153
+  -0.4384
+  -0.3186
+  -0.1675
+
+w1 =
+
+  -0.1634
+  -0.3108
+  -0.4277
+  -0.5027
+  -0.5286
+  -0.5027
+  -0.4277
+  -0.3108
+  -0.1634
+
+w1 =
+
+  -0.1594
+  -0.3032
+  -0.4172
+  -0.4904
+  -0.5156
+  -0.4904
+  -0.4172
+  -0.3032
+  -0.1594
+
+w1 =
+
+  -0.1555
+  -0.2957
+  -0.4070
+  -0.4784
+  -0.5030
+  -0.4784
+  -0.4070
+  -0.2957
+  -0.1555
+
+w1 =
+
+  -0.1517
+  -0.2885
+  -0.3971
+  -0.4667
+  -0.4907
+  -0.4667
+  -0.3971
+  -0.2885
+  -0.1517
+
+w1 =
+
+  -0.1480
+  -0.2814
+  -0.3873
+  -0.4553
+  -0.4787
+  -0.4553
+  -0.3873
+  -0.2814
+  -0.1480
+
+w1 =
+
+  -0.1443
+  -0.2745
+  -0.3779
+  -0.4442
+  -0.4670
+  -0.4442
+  -0.3779
+  -0.2745
+  -0.1443
+
+w1 =
+
+  -0.1408
+  -0.2678
+  -0.3686
+  -0.4333
+  -0.4556
+  -0.4333
+  -0.3686
+  -0.2678
+  -0.1408
+
+w1 =
+
+  -0.1374
+  -0.2613
+  -0.3596
+  -0.4227
+  -0.4445
+  -0.4227
+  -0.3596
+  -0.2613
+  -0.1374
+
+w1 =
+
+  -0.1340
+  -0.2549
+  -0.3508
+  -0.4124
+  -0.4336
+  -0.4124
+  -0.3508
+  -0.2549
+  -0.1340
+
+w1 =
+
+  -0.1307
+  -0.2486
+  -0.3422
+  -0.4023
+  -0.4230
+  -0.4023
+  -0.3422
+  -0.2486
+  -0.1307
+
+w1 =
+
+  -0.1275
+  -0.2425
+  -0.3338
+  -0.3924
+  -0.4126
+  -0.3924
+  -0.3338
+  -0.2425
+  -0.1275
+
+w1 =
+
+  -0.1244
+  -0.2366
+  -0.3257
+  -0.3828
+  -0.4025
+  -0.3828
+  -0.3257
+  -0.2366
+  -0.1244
+
+w1 =
+
+  -0.1213
+  -0.2308
+  -0.3177
+  -0.3735
+  -0.3927
+  -0.3735
+  -0.3177
+  -0.2308
+  -0.1213
+
+w1 =
+
+  -0.1184
+  -0.2252
+  -0.3099
+  -0.3643
+  -0.3831
+  -0.3643
+  -0.3099
+  -0.2252
+  -0.1184
+\end{matlaboutput}
+\end{multicols*}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{im6.pdf}
+    \caption{Solución de la EDP}
+    \label{fig:solucion_edp6}
+\end{figure}

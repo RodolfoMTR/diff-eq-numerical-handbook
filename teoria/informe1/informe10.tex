@@ -1,0 +1,20 @@
+Es un ejemplo de uso de la función \texttt{runge11.m} que se definió en el informe 8. Esta función implementa el método de Runge-Kutta de orden 4 para resolver ecuaciones diferenciales ordinarias (EDO). En este caso, se utiliza para resolver la EDO:
+\begin{equation*}
+    y'=t-ty \quad y(0)=\frac{1}{2}\quad t\in[0,1]
+\end{equation*}
+que se definio en el informe 9 mediante la función \texttt{ff.m}.
+
+Se crea un nuevo programa llamado \textbf{llamadorRK.m} que llama a la función \texttt{runge11} y tiene la siguiente forma:
+\begin{matlabcode}
+    a=0;b=1;n=4;h=(b-a)/n;
+    y0=1/2;
+    y35=runge11(a,b,h,4,y0)
+\end{matlabcode}
+Se ejecuta el programa \textbf{llamadorRK.m} y se obtiene el siguiente resultado:
+\begin{matlaboutput}
+    >> llamadorRK
+
+    y35 =
+    
+        0.5000    0.5154    0.5588    0.6226    0.6967
+\end{matlaboutput}

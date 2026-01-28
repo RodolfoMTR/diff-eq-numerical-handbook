@@ -1,0 +1,79 @@
+El método de Rayleigh-Ritz es una técnica aproximada utilizada para resolver ecuaciones diferenciales, especialmente en problemas de valores propios y en mecánica estructural. Consiste en aproximar la solución mediante funciones de prueba y minimizar una forma funcional asociada al problema, obteniendo así un sistema de ecuaciones algebraicas que se puede resolver numéricamente.
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{p, q, r}: Funciones que definen la ecuación diferencial.
+    \item \texttt{x}: Vector de nodos en el intervalo de solución.
+    \item \texttt{h}: Tamaño de subintervalo.
+    \item \texttt{kk}: Matriz de coeficientes del sistema lineal.
+    \item \texttt{b}: Vector de términos independientes.
+    \item \texttt{c}: Solución aproximada en los nodos internos.
+    \item \texttt{yl}: Vector de la solución en todos los nodos (incluyendo condiciones de frontera).
+    \item \texttt{y}: Solución analítica para comparación.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+%-(1*y')'+2*y=-x x\in[0,1] y(0)=0=y(1)
+p=@(x) 1; q=@(x) 2; r=@(x) -x;
+x=[0 1/3 2/3 1]; h=1/3;
+
+n=length(x)-2;
+Ipl=@(t) p(t);Ipl=quad(Ipl,x(1),x(2))/h^2;
+Iql=@(t) (t-x(1)).^2.*q(t);Iql=quad(Iql,x(1),x(2))/h^2;
+for i=1:n-1
+    IpN=@(t) p(t);IpN=quad(IpN,x(i),x(i+1))/h^2;
+    IqN=@(t) q(t).*(t-x(i+1)).^2;IqN=quad(IqN,x(i),x(i+1))/h^2;
+    Ia=@(t) (x(i+2)-t).^2*q(t);Ia=quad(Ia,x(i+1),x(i+2))/h^2;
+    Ib=@(t) (x(i+2)-t).*(t-x(i+1)).*q(t);Ib=quad(Ib,x(i+1),x(i+2))/h^2;
+    Ic=@(t) (t-x(i)).*r(t);Ic=quad(Ic,x(i),x(i+1))/h;
+    Id=@(t) (x(i+2)-t).*r(t);Id=quad(Id,x(i+1),x(i+2))/h;
+    kk(i,i)=Ipl+IpN+Iql+Ia;kk(i,i+1)=-IpN+Ib;
+    kk(i+1,i)=kk(i,i+1);b(i)=Ic+Id;
+    Ipl=IpN;Iql=IqN;
+end
+
+i=n-1;
+IpN=quad(p,x(i+2),x(i+3))/h^2;
+Ia=@(t) (x(i+3)-t).^2*q(t);Ia=quad(Ia,x(i+2),x(i+3))/h^2;
+Ic=@(t) (t-x(i+1)).*r(t);Ic=quad(Ic,x(i+1),x(i+2))/h;
+Id=@(t) (x(i+3)-t).*r(t);Id=quad(Id,x(i+2),x(i+3))/h;
+kk(i+1,i+1)=Ipl+IpN+Iql+Ia;
+b(2)=Ic+Id;
+[kk b']
+c=kk\b'
+yl=[0 c' 0];
+t=0:0.01:1;
+y=@(x) sinh(sqrt(2)*x)/(2*sinh(sqrt(2)))-x/2;
+plot(x,yl,t,y(t))
+
+\end{matlabcode}
+
+\textbf{Manual:}
+
+\begin{enumerate}
+    \item Copie el código Matlab/Octave en un archivo llamado \texttt{rayleigh\_ritz.m}.
+    \item Ejecute el archivo en Matlab o GNU Octave.
+    \item Verifique que los resultados impresos y la gráfica coincidan con los valores esperados.
+    \item Compare la solución numérica (\texttt{yl}) con la solución analítica (\texttt{y(x)}).
+    \item Modifique los valores de \texttt{x} o las funciones \texttt{p}, \texttt{q}, \texttt{r} para experimentar con otros problemas.
+\end{enumerate}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+ans =
+
+   6.4444  -2.8889  -0.1111
+  -2.8889   6.4444  -0.2222
+
+c =
+
+  -0.040923
+  -0.052827
+\end{matlaboutput}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{im3.pdf}
+    \caption{Solución de la EDO}
+    \label{fig:solucion_edo3}
+\end{figure}

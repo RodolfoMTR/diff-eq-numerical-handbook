@@ -1,0 +1,73 @@
+Es un procedimiento iterativo para resolver ecuaciones diferenciales ordinarias (EDO) de la forma
+\begin{equation*}
+    y' = f(t,y), \quad y(t_0) = y_0\quad  a\leq t\leq b
+\end{equation*}
+donde $f(t,y)$ es una función continua y $y_0$ es el valor inicial de la solución en el punto $t_0$. El método Runge-Kutta de orden 4 es uno de los métodos más utilizados debido a su precisión y estabilidad.
+
+\noindent\textbf{RUNGE-KUTTA de orden 4}
+
+\begin{align*}
+    w_0&=\alpha,\\
+    k_1&=h\cdot f(t_i,w_i),\\
+    k_2&=h\cdot f(t_i+\frac{h}{2},w_i+\frac{1}{2}k_1),\\
+    k_3&=h\cdot f(t_i+\frac{h}{2},w_i+\frac{1}{2}k_2),\\
+    k_4&=h\cdot f(t_{i+1},w_i+k_3),\\
+    w_{i+1}&=w_i+\frac{1}{6}(k_1+2k_2+2k_3+k_4)
+\end{align*}
+Sea la EDO 
+\begin{equation*}
+    y'=t-ty \quad y(0)=\frac{1}{2}\quad t\in[0,1]
+\end{equation*}
+con solucion analítica
+\begin{equation*}
+    y(t)=1-\frac{1}{2}e^{-t^2/2}
+\end{equation*}
+\textbf{Código en Matlab/Octave:}
+\begin{matlabcode}
+%Runge Kutta de orden 4
+y1 = @(t,y) t-t*y; %ec. diff. ordinaria a solucionar
+y0=1/2; %condición inicial
+a=0;b=1; %intervalos
+%----------------------
+yt=[];yt(1)=y0;
+N=4;
+h = (b-a)/N;
+a1=a;
+for i=1:N
+    k1=h*y1(a1,y0);
+    k2=h*y1(a1+h/2,y0+k1/2);
+    k3=h*y1(a1+h/2,y0+k2/2);
+    k4=h*y1(a1+h,y0+k3);
+    yp=y0+(k1+2*(k2+k3)+k4)/6;yt(i+1)=yp;
+    fprintf('%d| yn=%f| k1=%f| k2=%f| k3=%f | k4=%f| y_n+1=%f\n',i,y0,k1,k2,k3,k4,yp)
+    y0=yp; a1=a1+h;
+end
+  t1=a:h:b;
+  t=a:0.01:b; y3=1-exp(-t.^2/2)/2;
+  plot(t,y3,t1,yt,'.m','MarkerSize',20)
+\end{matlabcode}
+\textbf{Manual:}
+\begin{itemize}
+    \item Abrir el archivo \textbf{Rkorden4.m} en Matlab/Octave.
+    \item En las lineas 
+    \begin{verbatim}
+y1 = @(t,y) t-t*y; %ec. diff. ordinaria a solucionar
+y0=1/2; %condición inicial
+a=0;b=1; %intervalos
+    \end{verbatim}
+    Se ingresa la ecuación diferencial ordinaria a solucionar, la condición inicial y el intervalo de solución.
+    \item En la línea \textbf{N=4;} se define el número de pasos a realizar.
+    \item Ejecutar el script con el comando \textbf{Rkorden4} en la consola de Matlab/Octave.
+\end{itemize}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+    >> Rkorden4
+    1| yn=0.500000| k1=0.000000| k2=0.015625| k3=0.015381 | k4=0.030289| y_n+1=0.515383
+    2| yn=0.515383| k1=0.030289| k2=0.044013| k3=0.043370 | k4=0.055156| y_n+1=0.558752
+    3| yn=0.558752| k1=0.055156| k2=0.064636| k3=0.063895 | k4=0.070754| y_n+1=0.622580
+    4| yn=0.622580| k1=0.070766| k2=0.074820| k3=0.074377 | k4=0.075761| y_n+1=0.696734
+\end{matlaboutput}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width = 10cm]{figure3_inf5.pdf}
+\end{figure}

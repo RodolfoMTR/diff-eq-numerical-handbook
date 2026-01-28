@@ -1,0 +1,51 @@
+Este informe presenta la solución numérica de una ecuación diferencial parcial (EDP) utilizando el método de diferencias finitas. El programa implementado en Matlab/Octave resuelve la EDP en un dominio discreto, mostrando la evolución de la solución en el tiempo.
+
+\textbf{Variables:} \\
+\begin{itemize}
+    \item \texttt{la}: Parámetro relacionado con la estabilidad del método, calculado como $\frac{4 \times 1/1600}{0.1^2}$.
+    \item \texttt{A}: Matriz de coeficientes del esquema de diferencias finitas.
+    \item \texttt{n}: Número de divisiones espaciales (puntos de la malla).
+    \item \texttt{h}: Tamaño de paso espacial, calculado como $(2-0)/n$.
+    \item \texttt{x}: Vector de posiciones espaciales.
+    \item \texttt{w0}: Vector de condiciones iniciales, definido como $x^2 - 2x$.
+    \item \texttt{B}: Matriz que almacena la evolución de la solución en el tiempo.
+    \item \texttt{w1}: Vector de la solución en el siguiente paso temporal.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+la=(4*1/1600)/(0.1^2);A=[];n=10;h=(2-0)/n;
+A(1,1)=1-2*la;A(1,2)=la;
+for i=2:n-2
+    A(i,i-1)=la;A(i,i)=1-2*la;A(i,i+1)=la;
+end
+A(n-1,n-2)=la;A(n-1,n-1)=1-2*la;
+x=0:h:2;
+w0=x.^2-2*x;w0=w0';B=[];w0=w0(2:n);B(:,1)=w0;
+for i=1:10*10
+    w1=A*w0;
+    B(:,i+1)=w1;
+    w0=w1;
+end
+mesh(B)
+\end{matlabcode}
+
+\textbf{Manual:}
+
+Para ejecutar el programa, siga estos pasos:
+
+\begin{enumerate}
+    \item Abra Matlab o GNU Octave.
+    \item Copie el código proporcionado en un archivo llamado \texttt{dif\_finitas.m}.
+    \item Ejecute el archivo escribiendo \texttt{dif\_finitas} en la consola.
+    \item El programa mostrará una gráfica 3D (\texttt{mesh}) que representa la evolución de la solución en el tiempo.
+\end{enumerate}
+
+Asegúrese de tener los permisos necesarios para guardar archivos y visualizar gráficos en su entorno de trabajo.
+\textbf{Corrida del Programa:}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{im7.pdf}
+    \caption{Solución de la EDP}
+    \label{fig:solucion_edp7}
+\end{figure}

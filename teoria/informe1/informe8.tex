@@ -1,0 +1,27 @@
+Es el método de Runge-Kutta de orden 4, que a diferencia de como se escribió el programa en el informe 7, se ha implementado como una función que puede ser reutilizada por otros programas. Se crea un nuevo programa llamado \textbf{runge11.m}. \textbf{Este programa no se ejecuta directamente, sino que se llama desde otro programa. En el informe 10, se presenta un ejemplo de su uso.}
+
+\textbf{Código en Matlab/Octave:}
+\begin{matlabcode}
+%Runge Kutta de orden 4 como función
+function yx=runge11(a,b,h,n,y0)
+t=a;yx=[];yx(1)=y0;
+for i=1:n
+    k1=h*ff(t,y0);
+    k2=h*ff(t+h/2,y0+k1/2);
+    k3=h*ff(t+h/2,y0+k2/2);
+    k4=h*ff(t+h,y0+k3);
+    yy=y0+(k1+2*(k2+k3)+k4)/6;yx(i+1)=yy;
+    y0=yy; t=t+h;
+end
+\end{matlabcode}
+Donde
+\begin{itemize}
+    \item \texttt{a} es el límite inferior del intervalo.
+    \item \texttt{b} es el límite superior del intervalo.
+    \item \texttt{h} es el tamaño del paso.
+    \item \texttt{n} es el número de pasos.
+    \item \texttt{y0} es la condición inicial.
+    \item \texttt{ff} es la función que define la EDO a resolver.
+    \item \texttt{yx} es el vector que contiene los valores de la solución aproximada.
+\end{itemize}
+la función \textbf{ff} se va definir en otro programa, que estara detallado en el siguiente informe. Este programa no se ejecuta directamente, sino que se llama desde otro programa. En el informe 10, se presenta un ejemplo de su uso.

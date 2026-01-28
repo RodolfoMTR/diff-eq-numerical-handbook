@@ -1,0 +1,174 @@
+Es un método numérico para resolver una edo de la forma
+\[y' = f(t,y), \quad y(t_0) = y_0\quad  a\leq t\leq b\]
+esta dado en términos matemáticos
+\begin{equation}
+y_{i+1}=y_i+h\cdot f(x_i,y_i)
+\end{equation}
+donde
+\begin{itemize}
+    \item $y_i$ es el valor de la función en el punto $x_i$.
+    \item $h$ es el tamaño del paso, que se define como $h=(b-a)/N$, donde $N$ es el número de pasos.
+    \item $f(x_i,y_i)$ es la función que define la ecuación diferencial evaluada en el punto $(x_i,y_i)$.
+    \item $x_i$ es el valor de la variable independiente en el paso $i$, que se define como $x_i = a + i \cdot h$.
+    \item $y_{i+1}$ es el valor de la función en el siguiente paso, que se calcula a partir del valor actual $y_i$ y la pendiente dada por $f(x_i,y_i)$.
+    \item $N$ es el número de pasos que se desea realizar en el intervalo $[a,b]$.
+    \item $a$ es el límite inferior del intervalo.
+    \item $b$ es el límite superior del intervalo.
+    \item $t_0$ es el valor inicial de la variable independiente.
+    \item $y_0$ es el valor inicial de la función en el punto $t_0$.
+\end{itemize}
+
+Esta formula se conoce como \textbf{método de Euler}(o de \textit{Euler-Cauchy} o de \textit{Punto pendiente})\\
+
+\vspace{2mm}
+\textbf{Ejemplo:} Resolver la EDO con el método
+\begin{equation}
+y' = y^{1.5} + 1, \quad y(0) = 10 \text{ con } 0 \leq t \leq 1
+\end{equation}
+
+Con $h=1/2,\, h=1/4,\, h=0.1$
+
+\textbf{Solución}
+
+Creamos un script en \textit{Matlab/Octave} para resolver la ecuación diferencial con nombre \textbf{euler.m}.
+
+\textbf{Código en Matlab/Octave:}
+\begin{matlabcode}
+function [t,w] = euler(a,b,N,alpha,f)
+	h=(b-a)/N;
+	t = zeros(N+1,1); % Para guardar los valores de t
+	w = zeros(N+1,1); % Para guardar los valores de w
+	t(1)=a;
+	w(1)=alpha;
+	for i=1:N
+		w(i+1)=w(i)+h*f(t(i),w(i));
+		t(i+1)=a+i*h;
+	end
+end
+\end{matlabcode}
+Luego para ejecutar el script, creamos otro script llamado \textbf{run\_euler.m} que llama a la función \textbf{euler.m} y grafica los resultados.
+Como se quiere para un $h=1/2$, entonces $N=2$, esto se obtiene resolviendo la formula $h=(b-a)/N$.
+\begin{matlabcode}
+f = @(t, y) y^(3/2) + 1; %función de la EDO
+a=0;b=1; %intervalo
+N=2; %número de pasos
+y0=10; %condición inicial
+%-----------------------------
+[T1, W1] = euler(a, b, N, y0, f)
+plot(T1, W1, 'ro-');
+grid on;
+\end{matlabcode}
+\textbf{Manual:}
+\begin{itemize}
+    \item Abrir el archivo \textbf{run\_euler.m} en Matlab/Octave.
+    \item En las lineas 
+    \begin{verbatim}
+f = @(t, y) y^(3/2) + 1; %función de la EDO
+a=0;b=1; %intervalo
+N=2; %número de pasos
+y0=10; %condición inicial
+    \end{verbatim}
+    Se ingresa la ecuación diferencial ordinaria a solucionar, la condición inicial y el intervalo de solución.
+    \item En la línea \textbf{N=2;} se define el número de pasos a realizar.
+    \item Ejecutar el script con el comando \textbf{run\_euler} en la consola de Matlab/Octave.
+\end{itemize}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+T1 =
+
+    0
+0.5000
+1.0000
+
+W1 =
+
+10.000
+26.311
+94.293
+\end{matlaboutput}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{figure1_inf3.pdf}
+\caption{Gráfica de la solución con $h=1/2$}
+\end{figure}
+\newpage
+Para $h=1/4$, entonces $N=4$.
+\begin{matlabcode}
+f = @(t, y) y^(3/2) + 1; %función de la EDO
+a=0;b=1; %intervalo
+N=4; %número de pasos
+y0=10; %condición inicial
+%-----------------------------
+[T2, W2] = euler(a, b, N, y0, f)
+plot(T2, W2, 'ro-');
+grid on;
+\end{matlabcode}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+T2 =
+
+    0
+0.2500
+0.5000
+0.7500
+1.0000
+
+W2 =
+
+10.000
+18.156
+37.746
+95.971
+331.266
+\end{matlaboutput}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=10cm]{figure2_inf3.pdf}
+\caption{Gráfica de la solución con $h=1/4$}
+\end{figure}
+Para $h=0.1$, entonces $N=10$.
+\begin{matlabcode}
+f = @(t, y) y^(3/2) + 1; %función de la EDO
+a=0;b=1; %intervalo
+N=10; %número de pasos
+y0=10; %condición inicial
+%-----------------------------
+[T3, W3] = euler(a, b, N, y0, f)
+plot(T3, W3, 'ro-');
+grid on;
+\end{matlabcode}
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+T3 =
+
+        0
+   0.1000
+   0.2000
+   0.3000
+   0.4000
+   0.5000
+   0.6000
+   0.7000
+   0.8000
+   0.9000
+   1.0000
+
+W3 =
+
+   1.0000e+01
+   1.3262e+01
+   1.8192e+01
+   2.6051e+01
+   3.9448e+01
+   6.4325e+01
+   1.1601e+02
+   2.4107e+02
+   6.1548e+02
+   2.1425e+03
+   1.2060e+04
+\end{matlaboutput}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=8cm]{figure3_inf3.pdf}
+\caption{Gráfica de la solución con $h=0.1$}
+\end{figure}

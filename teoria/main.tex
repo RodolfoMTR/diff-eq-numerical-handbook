@@ -1,0 +1,124 @@
+\documentclass{article}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{mathrsfs}
+\usepackage[spanish]{babel}
+\newcommand{\R}{\mathbb R}
+\newcommand{\A}{\mathcal A}
+\newcommand{\B}{\mathcal B}
+\newcommand{\Rc}{\mathcal R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\T}{\mathscr{T}}
+\usepackage[utf8]{inputenc}
+\setlength{\parindent}{0cm}%sin identación
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[left=2.54cm, right=2.54cm,top=2.54cm,bottom=2.54cm,a4paper,heightrounded]{geometry}
+\usepackage{tcolorbox}%for theorems
+\tcbuselibrary{theorems}%for theorems
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{color}
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+\usepackage{matlab}
+\sloppy
+%for theorems
+\newtcbtheorem[number within=section]{theo}{Teorema}%
+{colback=green!5,colframe=green!35!black,fonttitle=\bfseries}{th}
+\newtcbtheorem[number within=section]{prop}{Proposición}%
+{colback=green!5,colframe=green!35!black,fonttitle=\bfseries}{prop}
+
+\newtcbtheorem[number within=section]{cor}{Corolario}%
+{colback=magenta!5,colframe=magenta!35!black,fonttitle=\bfseries}{cor}
+
+\newtcbtheorem[number within=section]{lema}{Lema}%
+{colback=yellow!5,colframe=yellow!35!black,fonttitle=\bfseries}{lem}
+
+\newtcbtheorem[number within=section]{deff}{Definición}%
+{colback=blue!5,colframe=blue!70!black,fonttitle=\bfseries}{deff}
+
+\newtheorem*{remark}{Observación}
+\newtheorem{exercise}{Ejercicio}
+\newenvironment{prueba}{\paragraph{Demostración:}\quad\\}{\hfill$\blacksquare$}
+% Define todas las rutas aquí
+\graphicspath{ {./informe1/media1/} {./informe2/media2/} {./informe3/media3/} }
+%------titulo
+\title{Manual de métodos numéricos para EDO's y EDP's}
+\author{Rodolfo M. Turpo R.}
+\date{08 de agosto de 2025}
+%-----
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Gráfica de Solución de una EDO}
+\input{informe1/informe1.tex}
+\section{Método de Euler}
+\input{informe1/informe2.tex}
+\section{Cotas del error de Euler}
+\input{informe1/informe3.tex}
+\section{Método de taylor}
+\input{informe1/informe4.tex}
+\section{Runge Kutta}
+\subsection{Runge kutta de orden 2}
+\input{informe1/informe5.tex}
+\subsection{Runge kutta de orden 3}
+\input{informe1/informe6.tex}
+\subsection{Runge kutta de orden 4}
+\input{informe1/informe7.tex}
+\subsection{Runge kutta como función en matlab/octave}
+\input{informe1/informe8.tex}
+\subsection{función \textbf{ff.m} para Runge-Kutta}
+\input{informe1/informe9.tex}
+\subsection{Ejemplo de uso de la función \textbf{runge11}}
+\input{informe1/informe10.tex}
+\subsection{Runge kutta para sistemas de EDO's}
+\input{informe1/informe17.tex}
+\section{Método de Adams-Bashforth}
+\subsection{Adams-Bashforth de orden 2}
+\input{informe1/informe11.tex}
+\subsection{Adams-Bashforth de orden 3}
+\input{informe1/informe12.tex}
+\subsection{Adams-Bashforth de orden 4}
+\input{informe1/informe13.tex}
+\section{Método de Moulton}
+\input{informe1/informe14.tex}
+\subsection{Método de Moulton de orden 3}
+\input{informe1/informe15.tex}
+\section{Graficar sistemas de ecuaciones diferenciales(EDO) de orden 1}
+\input{informe1/informe16.tex}
+\section{Disparo lineal}
+\input{informe2/informe3.tex}
+\subsection{Método del disparo con Runge-Kutta de orden 4}
+\input{informe2/informe4.tex}
+\subsection{Método del disparo con fórmula de las secantes}
+\input{informe2/informe6.tex}
+\subsection{Método del disparo para ecuaciones diferenciales no lineales}
+\input{informe2/informe11.tex}
+\section{Método de diferencias finitas}
+\subsection{Método de diferencias finitas para problemas lineales}
+\input{informe2/informe7.tex}
+\subsection{Método de diferencias finitas con contrucción automática de matriz}
+\input{informe2/informe8.tex}
+\subsection{Método de diferencias finitas iterativo para problema no lineal}
+\input{informe2/informe9.tex}
+\subsection{Diferencias finitas para EDP's de tipo parabólico}
+\input{informe3/informe5.tex}
+\newpage
+\section{Colocación Base}
+\subsection{Programa 1}
+\input{informe3/informe1.tex}
+\subsection{Programa 2}
+\input{informe3/informe2.tex}
+\section{Rayleigth-Ritz}
+\subsection{Programa 1}
+\input{informe3/informe3.tex}
+\subsection{Programa 2}
+\input{informe3/informe4.tex}
+\section{Crank-Nicolson para una EDP en especifico}
+\input{informe3/informe11.tex}
+\section{Crank-Nicolson para una EDP en general con $\theta=1/2$}
+\input{informe3/informe12.tex}
+
+\end{document}

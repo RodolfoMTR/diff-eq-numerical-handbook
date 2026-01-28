@@ -1,0 +1,60 @@
+Los archivos \texttt{fff.m} y \texttt{fffg.m} definen las funciones auxiliares necesarias para resolver una ecuación diferencial de segundo orden usando el método del disparo con Runge-Kutta de orden 4. La ecuación diferencial es:
+\[
+y'' = -2y - 3y' + t
+\]
+Para resolver esta ecuación con un método numérico de primer orden, se transforma en un sistema de dos ecuaciones de primer orden:
+\[
+\begin{cases}
+x = y \\
+x' = y' \\
+y' = -2x - 3y + t
+\end{cases}
+\]
+donde se definen las variables auxiliares \( x \) e \( y \) para convertir la EDO de segundo orden en un sistema acoplado. Estas funciones son utilizadas por el script principal \texttt{disparo\_r\_k\_11.m} para resolver el sistema de forma iterativa.
+
+---
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{t}: Variable independiente (tiempo).
+    \item \texttt{x}: Variable auxiliar que representa \( y \).
+    \item \texttt{y}: Derivada de \( x \), es decir, \( y' \), usada en la transformación del sistema.
+    \item \texttt{y1}: Resultado de la función:
+    \begin{itemize}
+        \item En \texttt{fff.m}, es simplemente \( y' \) (es decir, la derivada de \( x \)).
+        \item En \texttt{fffg.m}, es \( y'' = -2x - 3y + t \), el segundo miembro de la EDO original.
+    \end{itemize}
+\end{itemize}
+
+
+
+\textbf{Programa en Matlab/Octave de fff.m:}
+\begin{matlabcode}
+%funciones de la EDO y''=f(t,y,y')
+%se usa x=  y
+%y      y=f(t,x,y)
+%
+function y1=fff(t,x,y)
+        y1 = y;
+%       y(2) = -2*x-3*y+t;
+end
+
+\end{matlabcode}
+\textbf{Programa en Matlab/Octave de fffg.m:}
+\begin{matlabcode}
+%funciones de la EDO y''=f(t,y,y')
+%se usa x=  y
+%y      y=f(t,x,y)
+%
+function y1=fffg(t,x,y)
+        %y(1) = y;
+        y1 = -2*x-3*y+t;
+end
+
+\end{matlabcode}
+\textbf{Manual:}
+
+Se escribe dos nuevos scripts de nombre fff.m y fffg.m, que son las funciones de la EDO y''=f(t,y,y') que se usan en el programa disparo\_r\_k\_11.m. El primero es para la función f(t,x,y) y el segundo para la función f(t,x,y').
+
+\textbf{Corrida del Programa:} Estos dos programas no se ejecutan directamente, sino que se llaman desde otro programa de nombre disparo\_r\_k\_11.m.

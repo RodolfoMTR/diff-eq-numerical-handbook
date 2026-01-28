@@ -1,0 +1,34 @@
+El método de Taylor es un método numérico para resolver ecuaciones diferenciales ordinarias. Se basa en la expansión en serie de Taylor de la función solución alrededor de un punto inicial. La idea es aproximar la solución mediante una serie de potencias, utilizando las derivadas de la función en el punto inicial.
+La fórmula general del método de Taylor de orden $n$ es:
+\begin{equation}
+y(t+h) = y(t) + h \cdot y'(t) + \frac{h^2}{2!} \cdot y''(t) + \frac{h^3}{3!} \cdot y'''(t) + \ldots + \frac{h^n}{n!} \cdot y^{(n)}(t)
+\end{equation}
+donde $y(t)$ es la solución en el punto inicial, $h$ es el tamaño del paso y $y^{(k)}(t)$ es la $k$-ésima derivada de la función solución evaluada en el punto inicial.
+\vspace{2mm}
+
+\textbf{Ejemplo:} Encontrar la solución de la ecuación diferencial por el método de taylor y compararla con la solución analítica.
+\begin{equation*}
+y' = t - y, \quad y(0) = 0 \text{ con } 0 \leq t \leq 1
+\end{equation*}
+\textbf{Solución}
+
+\textbf{Código en Matlab/Octave:}
+\begin{matlabcode}
+a=0;b=1; %intervalo
+t=a:0.1:b;
+f1=@(t) t-1+exp(-t); %solución analítica
+ff=@(t) t.*t/2-t.^3/6+t.^4/24; %solución aproximada
+plot(t,f1(t),t,ff(t));
+\end{matlabcode}
+\textbf{Manual:}
+\begin{itemize}
+    \item Abrir el archivo \textbf{M\_Taylor.m} en Matlab/Octave.
+    \item Se modifica el intervalo de la solución en la primera línea, se modifica la función \textbf{f1} para la solución analítica y la función \textbf{ff} para la aproximación de Taylor.
+    \item Ejecutar el script con el comando \textbf{M\_Taylor} en la consola de Matlab/Octave.
+\end{itemize}
+\textbf{Corrida del Programa:}
+\begin{figure}[ht]
+\centering
+    \includegraphics[width=\maxwidth{30em}]{grafica4.pdf}
+    \caption{Comparación de la solución analítica y la aproximación de Taylor}
+\end{figure}

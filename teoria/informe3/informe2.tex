@@ -1,0 +1,60 @@
+Este informe presenta la resolución de una ecuación diferencial ordinaria (EDO) utilizando el método de colocación con funciones base polinomiales. Se desarrolla el procedimiento teórico y se implementa el algoritmo en Matlab/Octave para obtener la solución aproximada.
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item $u_1(x), u_2(x)$: Funciones base utilizadas en el método de colocación.
+    \item $du_1(x), du_2(x)$: Derivadas de las funciones base.
+    \item $ddu_1(x), ddu_2(x)$: Segundas derivadas de las funciones base.
+    \item $A$: Matriz de coeficientes del sistema lineal generado por el método.
+    \item $b$: Vector de términos independientes.
+    \item $p, q$: Coeficientes de la EDO.
+    \item $c$: Vector de coeficientes de la combinación lineal de las funciones base.
+    \item $x$: Vector de puntos en el intervalo de solución.
+    \item $y$: Solución aproximada de la EDO en los puntos $x$.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+%19/06/2025
+u1=@(x) (1-x).*x;u2=@(x) u1(x).*x;
+du1=@(x) (1-2.*x);du2=@(x) 2.*x-3.*x.*x;
+ddu1=@(x) -2;ddu2=@(x) 2-6.*x;
+A=[]; b=[]; p=1; q=-2;
+pp=@(x) (ddu1(x)+p.*du1(x)+q.*u1(x)).*u1(x);
+A(1,1)=quad(pp,0,1);
+pp=@(x) (ddu2(x)+p.*du2(x)+q.*u2(x)).*u1(x);
+A(1,2)=quad(pp,0,1);
+pp=@(x) (ddu1(x)+p.*du1(x)+q.*u1(x)).*u2(x);
+A(2,1)=quad(pp,0,1);
+pp=@(x) (ddu2(x)+p.*du2(x)+q.*u2(x)).*u2(x);
+A(2,2)=quad(pp,0,1);
+pp=@(x) x.*u1(x);
+b(1)=quad(pp,0,1);
+pp=@(x) x.*u2(x);
+b(2)=quad(pp,0,1);
+c=A\b';
+x=0:0.001:1;
+y=c(1).*u1(x)+c(2).*u2(x);
+plot(x,y,'m');
+grid;
+\end{matlabcode}
+
+\textbf{Manual:}
+
+\begin{enumerate}
+    \item Definir las funciones base $u_1(x)$ y $u_2(x)$, junto con sus derivadas primeras y segundas.
+    \item Plantear la ecuación diferencial ordinaria y los coeficientes $p$ y $q$.
+    \item Construir la matriz de coeficientes $A$ y el vector de términos independientes $b$ mediante la integración de los productos adecuados.
+    \item Resolver el sistema lineal $A c = b$ para obtener los coeficientes $c$ de la solución aproximada.
+    \item Evaluar la solución aproximada $y(x)$ en el intervalo deseado utilizando la combinación lineal de las funciones base.
+    \item Graficar la solución obtenida para visualizar el comportamiento de la EDO resuelta.
+\end{enumerate}
+\textbf{Corrida del Programa:}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{im2.pdf}
+    \caption{Solución de la EDO}
+    \label{fig:solucion_edo2}
+\end{figure}

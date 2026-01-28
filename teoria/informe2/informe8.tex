@@ -1,0 +1,89 @@
+Este programa resuelve un problema de valor en la frontera (BVP) para una ecuación diferencial de segundo orden utilizando el método de diferencias finitas, donde la matriz de coeficientes y el vector del segundo miembro se generan automáticamente dentro del código.
+
+El problema considerado es de la forma:
+\[
+y'' + p y' + q y = r(x), \quad \text{en } [a,b], \quad y(a) = y_a, \ y(b) = y_b
+\]
+En este caso particular:
+
+- \( p = 3 \), \( q = 2 \)
+
+- \( r(x) = x \) (función lineal)
+
+- Condiciones de frontera: \( y(0) = 0 \), \( y(1) = 1 \)
+
+Se discretiza el intervalo \([0,1]\) en \(n = 10\) subintervalos y se construye un sistema lineal \( A \cdot y = b \), que se resuelve para encontrar las aproximaciones de \( y(x) \) en los nodos interiores.
+
+---
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{p}, \texttt{q}: Coeficientes de la EDO en los términos \( y' \) y \( y \) respectivamente.
+    \item \texttt{r(x)}: Función fuente del lado derecho de la ecuación. En este caso, es \( r(x) = x \).
+    \item \texttt{a}, \texttt{b}: Extremos del intervalo donde se resuelve el problema.
+    \item \texttt{n}: Número de subintervalos de la discretización (hay \(n-1\) nodos interiores).
+    \item \texttt{ya}, \texttt{yb}: Valores de las condiciones de frontera en \(x = a\) y \(x = b\), respectivamente.
+    \item \texttt{h}: Paso de la malla, \( h = \frac{b-a}{n} \).
+    \item \texttt{A}: Matriz de coeficientes del sistema lineal construida con base en la discretización de la EDO.
+    \item \texttt{b}: Vector del segundo miembro construido en función de \( r(x) \) y de las condiciones de frontera.
+    \item \texttt{cc}: Solución del sistema lineal, concatenada con los valores de frontera para obtener la solución completa.
+    \item \texttt{t}: Vector que contiene los nodos de la discretización.
+\end{itemize}
+
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+% y''+py''+qy=r(x)
+p=3;q=2;a=0;b=1;n=10;
+ya=0;yb=1;
+%------------------
+h=(b-a)/n;
+A=[];b1=b;
+A(1,1)=2*h.^2-2;
+A(1,2)=1+3*h/2;
+b(1)=(a+h)*h.^2-(1-3*h/2)*ya;
+for i=2:(n-2)
+        A(i,i-1)=1-3*h/2;
+        A(i,i)=2*h*h-2;
+        A(i,i+1)=1+3*h/2;
+        b(i)=h.^2*(i*h);
+end%i
+A(n-1,n-2)=1-3*h/2;A(n-1,n-1)=2*h.^2-2;b(n-1)=(a+(n-1)*h)*h.^2-(1+3*h/2)*yb;
+[A b']
+cc=A\b';cc=[ya cc' yb];
+t=a:h:b1;
+plot(t,cc,'LineWidth', 2);  % Cambia el 2 por el grosor que desees
+\end{matlabcode}
+
+\textbf{Manual:}
+
+1. Guarde el código en un archivo llamado \texttt{dif\_finitas\_auto.m}.
+
+2. Ejecute en Octave o Matlab con:
+\begin{verbatim}
+>> dif_finitas_auto
+\end{verbatim}
+
+3. El programa construye automáticamente la matriz \( A \) y el vector \( b \) a partir de los coeficientes \( p \), \( q \), y de la función \( r(x) = x \).
+
+4. Resuelve el sistema \( A \cdot y = b \) e incorpora las condiciones de frontera para graficar la solución aproximada.
+
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+ans =
+
+  -1.9800   1.1500        0        0        0        0        0        0        0   0.0010
+   0.8500  -1.9800   1.1500        0        0        0        0        0        0   0.0020
+        0   0.8500  -1.9800   1.1500        0        0        0        0        0   0.0030
+        0        0   0.8500  -1.9800   1.1500        0        0        0        0   0.0040
+        0        0        0   0.8500  -1.9800   1.1500        0        0        0   0.0050
+        0        0        0        0   0.8500  -1.9800   1.1500        0        0   0.0060
+        0        0        0        0        0   0.8500  -1.9800   1.1500        0   0.0070
+        0        0        0        0        0        0   0.8500  -1.9800   1.1500   0.0080
+        0        0        0        0        0        0        0   0.8500  -1.9800  -1.1410
+\end{matlaboutput}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{im3_2.pdf}
+\end{figure}

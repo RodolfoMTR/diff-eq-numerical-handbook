@@ -1,0 +1,84 @@
+El método Crank-Nicolson es un esquema numérico implícito de segundo orden para resolver ecuaciones diferenciales parciales, especialmente la ecuación de difusión o calor. Combina los métodos de Euler hacia adelante y hacia atrás, proporcionando mayor estabilidad y precisión.
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item $a$: coeficiente de difusión (en este caso $a = -1$).
+    \item $h$: tamaño de paso espacial.
+    \item $k$: tamaño de paso temporal.
+    \item $x$: vector de posiciones espaciales.
+    \item $w0$: condición inicial de la solución.
+    \item $BB$: matriz que almacena las soluciones en cada paso temporal.
+    \item $L$: parámetro auxiliar para el método.
+    \item $A$, $B$: matrices del sistema lineal generado por el método.
+    \item $wi$: vector auxiliar para la iteración.
+    \item $cc$: solución del sistema en cada paso temporal.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+%07/07/2025
+% Crank-Nicolson para un problema en especifico
+%u_t=1*u_xx, u(t,0)=u(t,1) , u(0,x)=x-x^2
+a=-1;h=1/4;k=(1/5);
+format rat
+BB=[];
+x=0:1/4:1;
+w0=x-x.^2;
+w0=w0(2:4)';
+BB(:,1)=[0 w0' 0]';
+L=a^2*k/h^2;
+A=[1+L -L/2 0;-L/2 1+L -L/2;0 -L/2 1+L]
+B=[1-L L/2 0;L/2 1-L L/2;0 L/2 1-L]
+%Mecanica de solucion
+wi=B*w0;
+format
+cc=A\wi;w0=cc;BB(:,2)=[0 w0' 0]';
+wi=B*w0;
+format
+cc=A\wi;w0=cc;BB(:,3)=[0 w0' 0]';
+wi=B*w0;
+format
+cc=A\wi;w0=cc;BB(:,4)=[0 w0' 0]';
+wi=B*w0;
+format
+cc=A\wi;w0=cc;BB(:,5)=[0 w0' 0]';
+wi=B*w0;
+format
+cc=A\wi;w0=cc;BB(:,6)=[0 w0' 0]';
+wi=B*w0;
+format
+cc=A\wi;w0=cc;BB(:,7)=[0 w0' 0]';
+mesh(BB)
+\end{matlabcode}
+
+\textbf{Manual:}
+
+Para ejecutar el programa, siga estos pasos:
+
+1. Abra Matlab u Octave y copie el código proporcionado en un archivo llamado `crank\_nicolson.m`.
+2. Ejecute el archivo en la consola con el comando `crank\_nicolson`.
+3. El programa calculará la solución numérica de la ecuación de difusión usando el método Crank-Nicolson y mostrará la evolución de la solución en una gráfica de malla (`mesh`).
+4. Los resultados intermedios de las matrices $A$ y $B$ se muestran en la salida, y la figura generada (`im11.pdf`) representa la solución aproximada en los distintos pasos temporales.
+
+Asegúrese de tener instalado Matlab u Octave y de que el archivo se encuentre en el directorio de trabajo.
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+A =
+
+       21/5       -8/5          0
+       -8/5       21/5       -8/5
+          0       -8/5       21/5
+
+B =
+
+      -11/5        8/5          0
+        8/5      -11/5        8/5
+          0        8/5      -11/5
+\end{matlaboutput}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{im11.pdf}
+    \caption{Solución de la EDP}
+    \label{fig:solucion_edp11}
+\end{figure}

@@ -1,0 +1,20 @@
+\noindent\textbf{Problema a resolver}
+\begin{equation*}
+    y'=\frac{2y}{t}+t^2e^t,\,1\leq t\leq 2, y(1)=0
+\end{equation*}
+con Solución exacta
+\begin{equation*}
+    y(t)=t^2(e^t-e)
+\end{equation*}
+\noindent\textbf{RUNGE-KUTTA de tercer Orden}\\
+Para $n=3$, es posible efectuar un desarrollo similar al del método de segundo orden. Una versión comun que se obtiene es
+\begin{equation}
+    y_{i+1}=y_i+\frac{1}{6}(k_1+4k_2+k_3)h
+\end{equation}
+donde
+\begin{align}
+    k_1&=f(x_i,y_i)\\
+    k_2&=f(x_i+\frac{1}{2}h,y_i+\frac{1}{2}k_1h)\\
+    k_3&=f(x_i+h,y_i-k_1h+2k_2h)
+\end{align}
+\textbf{Solución al Problema}

@@ -1,0 +1,55 @@
+Este programa resuelve un problema de valor en la frontera (BVP) para una ecuación diferencial lineal de segundo orden utilizando el método de diferencias finitas. En lugar de construir la matriz del sistema de forma automática, en este caso se ha calculado manualmente la matriz de coeficientes \( A \) y el vector del lado derecho \( b \), lo que simplifica la implementación y permite concentrarse en el concepto del método.
+
+Se supone que la EDO tiene la forma general:
+\[
+y'' + p(x)y' + q(x)y = r(x), \quad y(0) = 0,\ y(1) = 1
+\]
+y que el dominio \([0,1]\) se ha discretizado con \( n = 4 \) puntos (3 nodos interiores).
+
+---
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{A}: Matriz de coeficientes del sistema lineal generado por el método de diferencias finitas, con los valores ya ingresados manualmente.
+    \item \texttt{b}: Vector del lado derecho del sistema, calculado según las condiciones de frontera y los valores de la función \( r(x) \) en los nodos internos.
+    \item \texttt{y}: Vector solución del sistema lineal \( A \cdot y = b \), que contiene las aproximaciones de la función en los nodos interiores. Se completa con las condiciones de frontera: \( y(0) = 0 \) y \( y(1) = 1 \).
+    \item \texttt{x}: Vector que contiene los puntos del dominio equiespaciados en el intervalo \([0,1]\), incluyendo los extremos.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+A=[-15/8 11/8 0; 5/8 -15/8 11/8;0 5/8 -15/8];
+b=[1/64 1/32 -85/64];
+y=inv(A)*b'
+y=[0 y' 1];
+x=0:1/4:1;
+plot(x,y)
+\end{matlabcode}
+
+\textbf{Manual:}
+
+1. Guarde el código en un archivo llamado \texttt{dif\_finitas\_manual.m}.
+
+2. Ejecute desde la consola de Octave o Matlab con:
+\begin{verbatim}
+>> dif_finitas_manual
+\end{verbatim}
+
+3. El programa resuelve el sistema lineal ingresado manualmente y grafica la función aproximada \( y(x) \) en el intervalo \([0,1]\), incluyendo los valores de frontera.
+
+4. La matriz \( A \) y el vector \( b \) se han deducido manualmente a partir de la discretización por diferencias finitas y de las condiciones de contorno.
+
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+y =
+
+   0.7091
+   0.9783
+   1.0344
+
+\end{matlaboutput}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.5\textwidth]{im2_2.pdf}
+\end{figure}

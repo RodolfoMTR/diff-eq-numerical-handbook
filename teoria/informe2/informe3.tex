@@ -1,0 +1,82 @@
+Este programa resuelve un problema de contorno para una ecuación diferencial lineal de segundo orden:
+\[
+y'' + 3y' + 2y = t
+\]
+usando el método del disparo lineal. Este método convierte un problema de contorno en un conjunto de problemas de valor inicial que se resuelven con técnicas numéricas, como Runge-Kutta. El resultado se compara con la solución exacta conocida del problema.
+
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{a}, \texttt{b}: Extremos del intervalo \([a,b]\), donde se resuelve la ecuación diferencial.
+    \item \texttt{n}: Número de subintervalos para el método numérico.
+    \item \texttt{h}: Tamaño del paso, calculado como \( h = \frac{b-a}{n} \).
+    \item \texttt{t}: Variable que recorre el intervalo \([a,b]\), utilizada tanto en la integración como en la solución exacta.
+    \item \texttt{x0}, \texttt{y0}: Condiciones iniciales para \(x\) e \(y\) en el método del disparo.
+    \item \texttt{k}: Parámetro que se pasa a la función diferencial definida en \texttt{ff.m}, dependiendo de la proporción que se está resolviendo.
+    \item \texttt{yy}, \texttt{y11}, \texttt{y22}: Vectores con las soluciones numéricas obtenidas de las dos proporciones resueltas mediante el método de Runge-Kutta.
+    \item \texttt{ys}: Solución lineal combinada del método de disparo, ajustada para satisfacer la condición de frontera.
+    \item \texttt{yv}: Solución exacta del problema, usada para comparar contra \texttt{ys}.
+    \item \texttt{c1}, \texttt{c2}: Constantes calculadas para definir la solución exacta del problema.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+%disparo lineal y''+3y'+2y=t
+a=0;b=1;n=10;h=(b-a)/n;t=a;
+%y1(x) es la primera proporción
+k=1;x0=0;y0=1;
+yy=runge_sis(a,b,x0,0,n,1);
+y11=yy(1,:);
+%y2(x) la segunda proporción
+k=0;yy=runge_sis(a,b,0,01,n,0);
+y22=yy(1,:);
+ys=y11+(y0-y11(n+1))*y22/y22(n+1);
+ys'
+t=a:h:b;
+c2=(5-3*exp(-2))/(4*(exp(-1)-exp(-2)));c1=3/4-c2;
+yv=c1*exp(-2*t)+c2*exp(-t)+t/2-3/4;%solucion exacta
+plot(t,ys,t,yv)
+% 
+% 
+%
+\end{matlabcode}
+
+\textbf{Manual:}
+
+1. Este archivo debe guardarse como \texttt{disparo\_lineal.m}.
+
+2. Requiere tener definido el archivo \texttt{ff.m}, que contenga la ecuación diferencial como función de entrada.
+
+3. También requiere el archivo \texttt{runge\_sis.m}, que implementa el método de Runge-Kutta para sistemas.
+
+4. Se ejecuta desde la consola con:
+\begin{verbatim}
+>> disparo_lineal
+\end{verbatim}
+
+5. El programa grafica la solución numérica aproximada y la solución exacta, y además imprime la solución aproximada \texttt{ys} en consola.
+
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+octave:4> disparo_lineal
+ans =
+
+        0
+   0.2982
+   0.4959
+   0.6303
+   0.7251
+   0.7950
+   0.8492
+   0.8938
+   0.9324
+   0.9673
+   1.0000
+
+\end{matlaboutput}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{im1_2.pdf}
+\caption{Gráfico de la solución del disparo lineal.}
+\end{figure}

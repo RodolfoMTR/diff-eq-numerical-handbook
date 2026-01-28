@@ -1,0 +1,52 @@
+Este programa implementa el método del disparo combinado con la fórmula de las secantes para resolver un problema de valor en la frontera (BVP) de una ecuación diferencial ordinaria (EDO) de segundo orden. El objetivo es encontrar la condición inicial desconocida (en este caso, \( y'(0) \)) que hace que la solución numérica satisface la condición de frontera en el extremo derecho del intervalo. El método consiste en probar diferentes valores para \( y'(0) \), integrando el sistema con Runge-Kutta (usando \texttt{disparo\_r\_k\_11}), y ajustando el valor usando la fórmula de las secantes hasta cumplir con la condición deseada en \( y(b) \approx B \).
+
+\textbf{Variables:}
+
+\begin{itemize}
+    \item \texttt{a}, \texttt{b}: Extremos del intervalo de integración \([a, b] = [0, 1]\).
+    \item \texttt{n}: Número de subintervalos para la integración numérica.
+    \item \texttt{x}, \texttt{y}: Valores iniciales de la función \( x(t) \) e \( y(t) \) en \( t = a \). Aquí \( x = y(0) = 0 \).
+    \item \texttt{B}: Valor deseado en la frontera derecha \( y(b) = B = 0.5 \), usado como condición de contorno.
+    \item \texttt{yn}, \texttt{yn1}, \texttt{yn2}: Sucesivos valores aproximados de la condición inicial desconocida \( y'(0) \), ajustados usando la fórmula de las secantes.
+    \item \texttt{gt}, \texttt{gr}: Matrices de resultados devueltos por \texttt{disparo\_r\_k\_11} para diferentes valores de \( y'(0) \).
+    \item \texttt{g1}: Fila que representa los valores aproximados de \( x(t) \) (o \( y(t) \)) en el tiempo.
+    \item \texttt{ytp1}, \texttt{ytp2}: Valores de \( y(b) \) obtenidos en las integraciones numéricas anteriores, usados en la fórmula de las secantes.
+\end{itemize}
+
+\textbf{Programa en Matlab/Octave:}
+\begin{matlabcode}
+a=0;b=1;n=4;x=0;y=0;B=0.5;
+yn=0;yn1=1;
+for i=1:5
+gt=disparo_r_k_11(a,b,x,yn,n);
+gr=disparo_r_k_11(a,b,x,yn1,n);
+g1=gt(1,:);
+ytp1=g1(n+1);
+g1=gr(1,:);
+ytp2=g1(n+1);
+%formula de secantes
+yn2=yn1-(ytp2-B)*(yn1-yn)/(ytp2-ytp1)
+if abs(yn1-yn2)<0.001 break;end;
+yn=yn1;yn1=yn2;
+end
+
+\end{matlabcode}
+\textbf{Manual:}
+
+1. Este código debe guardarse como \texttt{llamador.m}.
+
+2. Requiere previamente tener definidos los archivos \texttt{disparo\_r\_k\_11.m}, \texttt{fff.m} y \texttt{fffg.m}.
+
+3. Ejecutar en la consola de Octave o Matlab con:
+\begin{verbatim}
+>> llamador
+\end{verbatim}
+
+4. El programa aplicará el método del disparo usando dos soluciones aproximadas con valores diferentes de \( y'(0) \) e irá ajustando esos valores usando la fórmula de las secantes, hasta que se cumpla la condición de frontera \( y(1) = 0.5 \) con una tolerancia de error menor a 0.001.
+
+\textbf{Corrida del Programa:}
+\begin{matlaboutput}
+octave:2> llamador
+yn2 = 1.7904
+yn2 = 1.7904
+\end{matlaboutput}

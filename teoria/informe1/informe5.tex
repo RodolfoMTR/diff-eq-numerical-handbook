@@ -17,59 +17,68 @@ donde:
     h&=(b-a)/N
 \end{align*}
 Éste es el método del punto medio.\\
+\textbf{Ejemplo:}
 Sea la EDO
 \begin{equation*}
     y'=t-y^{1.5} \quad y(1)=1 \text{ con } 1 \leq t \leq 2
 \end{equation*}
+Resolveremos primero con el método de taylor y la compararemos con su solución apróximada con runge kutta de orden 2 en el intervalo $[1,2]$
+
+ \textbf{método de taylor}
+ \textbf{Solución apróximada}
+
 Hacemos el Algoritmo Runge-Kutta de orden 2
 
 \textbf{Código en Matlab/Octave:}
+
 \begin{matlabcode}
-    %Runge Kutta de orden 2
-    y1 = @(t,y) t-y^(3/2); %ec diff ordinaria
-    y0=1; %condición inicial
-    a=1;b=2; %intervalo donde se quiere la solución
-    %-----------------------------------------
-    N = 8;
-    yt= zeros(1,N); yt(1)=y0;
-    h = (b-a)/N;
-    a1=a;
-    for i=1:N
-        k1=h*y1(a1,y0);
-        k2=h*y1(a1+h,y0+k1);
-        yp=y0+(k1+k2)/2;yt(i+1)=yp;
-        fprintf('%d| yn=%f| k1=%f| k2=%f| y_n+1=%f\n',i,y0,k1,k2,yp)
-        y0=yp; a1=a1+h;
-    end
-     t1=a:h:b;
-     plot(t1,yt,'.r','MarkerSize',10)
-\end{matlabcode}
-\textbf{Manual:}
-\begin{itemize}
-    \item Abrir el archivo \textbf{Rkorden2.m} en Matlab/Octave.
-    \item En las lineas 
-    \begin{verbatim}
+%Rkorden2.m
+%Runge Kutta de orden 2
 y1 = @(t,y) t-y^(3/2); %ec diff ordinaria
-y0=1; %condición inicial
-a=1;b=2; %intervalo donde se quiere la solución
-    \end{verbatim}
-    Se ingresa la ecuación diferencial ordinaria a solucionar, la condición inicial y el intervalo de solución.
-    \item En la línea \textbf{N=8;} se define el número de pasos a realizar.
-    \item Ejecutar el script con el comando \textbf{Rkorden2} en la consola de Matlab/Octave.
-\end{itemize}
-\textbf{Corrida del Programa:}
+y0=1; %condicion inicial
+a=1;b=2; %intervalo donde se quiere la solucion
+N = 8; %numero de pasos
+%----------ALGORITMO----------------
+yt= zeros(1,N); yt(1)=y0;
+h = (b-a)/N;
+a1=a;
+for i=1:N
+k1=h*y1(a1,y0);
+k2=h*y1(a1+h,y0+k1);
+yp=y0+(k1+k2)/2;yt(i+1)=yp;
+fprintf('%d| y_%d=%f| k1=%f| k2=%f| y_%d+1=%f\n',i,i-1,y0,k1,k2,i-1,yp)
+y0=yp; a1=a1+h;
+end
+t1=a:h:b;
+%-------GRAFICA-----------------
+plot(t1,yt,'ro-','MarkerSize',5)
+% Etiquetas de los ejes
+xlabel('Tiempo (t)')
+ylabel('Solucion aproximada y(t)')
+
+\end{matlabcode}
+
+\textbf{Resultados:}
 \begin{matlaboutput}
-    octave:12> RKorden2
-    1| yn=1.000000| k1=0.000000| k2=0.015625| y_n+1=1.007812
-    2| yn=1.007812| k1=0.014157| k2=0.027108| y_n+1=1.028445
-    3| yn=1.028445| k1=0.025879| k2=0.036552| y_n+1=1.059661
-    4| yn=1.059661| k1=0.035523| k2=0.044235| y_n+1=1.099540
-    5| yn=1.099540| k1=0.043379| k2=0.050392| y_n+1=1.146425
-    6| yn=1.146425| k1=0.049688| k2=0.055231| y_n+1=1.198885
-    7| yn=1.198885| k1=0.054662| k2=0.058938| y_n+1=1.255685
-    8| yn=1.255685| k1=0.058489| k2=0.061683| y_n+1=1.315771
+octave:13> Rkorden2
+1| y_0=1.000000| k1=0.000000| k2=0.015625| y_0+1=1.007812
+2| y_1=1.007812| k1=0.014157| k2=0.027108| y_1+1=1.028445
+3| y_2=1.028445| k1=0.025879| k2=0.036552| y_2+1=1.059661
+4| y_3=1.059661| k1=0.035523| k2=0.044235| y_3+1=1.099540
+5| y_4=1.099540| k1=0.043379| k2=0.050392| y_4+1=1.146425
+6| y_5=1.146425| k1=0.049688| k2=0.055231| y_5+1=1.198885
+7| y_6=1.198885| k1=0.054662| k2=0.058938| y_6+1=1.255685
+8| y_7=1.255685| k1=0.058489| k2=0.061683| y_7+1=1.315771
 \end{matlaboutput}
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width = 10cm]{figure1_inf5.pdf}
 \end{figure}
+
+\textbf{Comparación con método de taylor}
+\begin{matlabcode}
+y_1= %metodo de taylor
+y_2= %runge kutta de orden 2
+N=8
+\end{matlabcode}

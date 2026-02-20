@@ -1,34 +1,108 @@
 El método de Taylor es un método numérico para resolver ecuaciones diferenciales ordinarias. Se basa en la expansión en serie de Taylor de la función solución alrededor de un punto inicial. La idea es aproximar la solución mediante una serie de potencias, utilizando las derivadas de la función en el punto inicial.
 La fórmula general del método de Taylor de orden $n$ es:
 \begin{equation}
-y(t+h) = y(t) + h \cdot y'(t) + \frac{h^2}{2!} \cdot y''(t) + \frac{h^3}{3!} \cdot y'''(t) + \ldots + \frac{h^n}{n!} \cdot y^{(n)}(t)
+y(t) = y(t_0) + (t-t_0) \cdot y'(t_0) + \frac{(t-t_0)^2}{2!} \cdot y''(t_0) + \frac{(t-t_0)^3}{3!} \cdot y'''(t_0) + \ldots + \frac{(t-t_0)^n}{n!} \cdot y^{(n)}(t_0)
 \end{equation}
-donde $y(t)$ es la solución en el punto inicial, $h$ es el tamaño del paso y $y^{(k)}(t)$ es la $k$-ésima derivada de la función solución evaluada en el punto inicial.
+donde $y(t)$ es la solución en el punto inicial y $y^{(k)}(t_0)$ es la $k$-ésima derivada de la función solución evaluada en el punto inicial.
 \vspace{2mm}
 
 \textbf{Ejemplo:} Encontrar la solución de la ecuación diferencial por el método de taylor y compararla con la solución analítica.
 \begin{equation*}
 y' = t - y, \quad y(0) = 0 \text{ con } 0 \leq t \leq 1
 \end{equation*}
-\textbf{Solución}
+\textbf{Solución analítica}
 
-\textbf{Código en Matlab/Octave:}
+resolver la ecuación homogenea
+\begin{align*}
+	y'+y&=0\\
+	y'&=-y\\
+	\frac{dy}{dt}&=-y\\
+	\frac{dy}{y}&=-1dt\\
+	\int\frac{dy}{y}&=\int-1dt\\
+	ln|y|+c_1&=-t+c_2\\
+	ln|y|&=-t+c\quad ;c=c_2-c_1\\
+\end{align*}
+utilizando la función exponencial $e$
+ \begin{align*}
+	 |y|&=e^{-t+c}\\
+	 |y|&=e^{c}e^{-t}\\
+	 y&=\pm e^{c}e^{-t}\\
+	 y&=Ke^{-t}\quad ; K=\pm e^{c}
+\end{align*}
+resolver la ecuación no homogenea 
+\begin{align*}
+	y&=ue^{-t}\\
+	y'&=u'e^{-t}-ue^{-t}\quad ;u'=\frac{du}{dt}
+\end{align*}
+sumamos para formar la EDO
+\begin{align*}
+	y'+y&=u'e^{-t}-ue^{-t}+ue^{-t}=u'e^{-t}=t\\
+	u'e^{-t}&=t\\
+	u'&=te^{t}\\
+	\frac{du}{dt}&=te^{t}\\
+	du&=te^{t}dt\\
+	\int du&=\int te^{t}dt\\
+\end{align*}
+el lado izquierdo la integral, $f(t)=t,\, g'(t)=e^{t}$, entonces $f'(t)=1,\, g(t)=e^{t}$
+\begin{align*}
+	u+c_1&=te^{t}-\int 1\cdot e^{t}dt\\
+	u+c_1&=te^{t}-e^{t}+c_2\\
+	u&=te^{t}-e^{t}+c\quad ;c=c_2-c_1
+\end{align*}
+entonces la solución de la ecuación diferencial sin condición inicial es
+\[
+y=ue^{-t}=(te^{t}-e^{t}+c)e^{-t}=t-1+ce^{-t}
+\] 
+evaluando la condición inicial
+\begin{align*}
+	y(0)&=0-1+ce^{0}=0\\
+	-1+c&=0\\
+	c&=1
+\end{align*}
+por tanto, reemplazando $c$, la solución analítica del problema de valor inicial es
+\[
+y=t-1+e^{-t}\quad  \text{ con } 0 \leq t \leq 1
+\] 
+\textbf{Solución aproximada con taylor de orden 4}
+
+\begin{align*}
+	y'&=t-y\\
+	y''&=1-y'\\
+	y'''&=-y''\\
+	y^{(4)}&=y'''
+\end{align*}
+Usando la condición inicial ($y(0)=0$)
+\begin{align*}
+	y'(0)&=0-y(0)=0-0=0\\
+	y''(0)&=1-y'(0)=1-0=1\\
+	y'''(0)&=-y''(0)=-1\\
+	y^{(4)}(0)&=-y'''(0)=1
+\end{align*}
+reemplazando estos resultados en la serie de taylor se obtiene
+\[
+y(t)=y(0)+ty'(0)+t^2\frac{y''(0)}{2!}+t^3\frac{y'''(0)}{3!}+t^{4}\frac{y^{(4)}(0)}{4!}
+\]
+\[
+y(t)=0+t\cdot 0+t^{2}\frac{1}{2}+t^3\frac{-1}{6}+t^{4}\frac{1}{24}
+\] 
+\[
+y(t)=\frac{1}{2}t^{2}+\frac{-1}{6}t^3+\frac{1}{24}t^{4}
+\] 
+
+Ahora grafiquemos las dos soluciones con un simple \textit{script} en el intervalo $[0,1]$ para ver que tanto difiere la solución aproximada de la solución analítica
+
 \begin{matlabcode}
 a=0;b=1; %intervalo
 t=a:0.1:b;
-f1=@(t) t-1+exp(-t); %solución analítica
-ff=@(t) t.*t/2-t.^3/6+t.^4/24; %solución aproximada
+f1=@(t) t-1+exp(-t); %solucion analitica
+ff=@(t) t.*t/2-t.^3/6+t.^4/24; %solucion aproximada
 plot(t,f1(t),t,ff(t));
 \end{matlabcode}
-\textbf{Manual:}
-\begin{itemize}
-    \item Abrir el archivo \textbf{M\_Taylor.m} en Matlab/Octave.
-    \item Se modifica el intervalo de la solución en la primera línea, se modifica la función \textbf{f1} para la solución analítica y la función \textbf{ff} para la aproximación de Taylor.
-    \item Ejecutar el script con el comando \textbf{M\_Taylor} en la consola de Matlab/Octave.
-\end{itemize}
-\textbf{Corrida del Programa:}
+
+\textbf{Resultados:}
+
 \begin{figure}[ht]
 \centering
-    \includegraphics[width=\maxwidth{30em}]{grafica4.pdf}
+    \includegraphics[scale=0.5]{grafica4.pdf}
     \caption{Comparación de la solución analítica y la aproximación de Taylor}
 \end{figure}

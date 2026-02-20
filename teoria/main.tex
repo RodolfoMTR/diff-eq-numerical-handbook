@@ -1,7 +1,8 @@
 \documentclass{article}
 \usepackage{amsmath,amsfonts,amssymb,amsthm}
 \usepackage{mathrsfs}
-\usepackage[spanish]{babel}
+\usepackage{comment}
+\usepackage[spanish,es-noshorthands]{babel}
 \newcommand{\R}{\mathbb R}
 \newcommand{\A}{\mathcal A}
 \newcommand{\B}{\mathcal B}
@@ -15,13 +16,19 @@
 \usepackage[left=2.54cm, right=2.54cm,top=2.54cm,bottom=2.54cm,a4paper,heightrounded]{geometry}
 \usepackage{tcolorbox}%for theorems
 \tcbuselibrary{theorems}%for theorems
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
 \usepackage{color}
 \usepackage[table]{xcolor}
 \usepackage{hyperref}
-\usepackage{matlab}
-\sloppy
+\hypersetup{
+    colorlinks=true,       % enlaces con colores en lugar de cuadros
+    linkcolor=blue,        % color de enlaces internos (índice, referencias)
+    citecolor=blue,        % color de citas bibliográficas
+    filecolor=blue,        % color de enlaces a archivos
+    urlcolor=blue,         % color de URLs
+    bookmarksnumbered=true,
+    pdfstartview=FitH
+}
+\input{matlab-config.tex}
 %for theorems
 \newtcbtheorem[number within=section]{theo}{Teorema}%
 {colback=green!5,colframe=green!35!black,fonttitle=\bfseries}{th}
@@ -54,13 +61,20 @@
 
 \section{Gráfica de Solución de una EDO}
 \input{informe1/informe1.tex}
+
+\newpage
 \section{Método de Euler}
 \input{informe1/informe2.tex}
 \section{Cotas del error de Euler}
 \input{informe1/informe3.tex}
+
+\newpage
 \section{Método de taylor}
 \input{informe1/informe4.tex}
+
+\newpage
 \section{Runge Kutta}
+
 \subsection{Runge kutta de orden 2}
 \input{informe1/informe5.tex}
 \subsection{Runge kutta de orden 3}
@@ -120,5 +134,4 @@
 \input{informe3/informe11.tex}
 \section{Crank-Nicolson para una EDP en general con $\theta=1/2$}
 \input{informe3/informe12.tex}
-
 \end{document}

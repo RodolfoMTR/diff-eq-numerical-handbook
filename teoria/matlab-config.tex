@@ -1,0 +1,57 @@
+% matlab-config.tex
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Estilo para código MATLAB
+\lstdefinestyle{matlabstyle}{
+    language=Matlab,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!50!black}\itshape,
+    stringstyle=\color{purple},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    backgroundcolor=\color{gray!7},
+    frame=single,
+    frameround=tttt,
+    rulecolor=\color{gray!20},
+    breaklines=true,
+    breakatwhitespace=false,
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=b,
+    xleftmargin=1em,
+    xrightmargin=1em
+}
+
+% Estilo para salida de consola/output
+\lstdefinestyle{outputstyle}{
+    basicstyle=\ttfamily\small\color{black!70},
+    numbers=none,
+    backgroundcolor=\color{white},
+    frame=single,
+    frameround=tttt,
+    rulecolor=\color{gray!30},
+    breaklines=true,
+    breakatwhitespace=false,
+    showstringspaces=false,
+    tabsize=4,
+    xleftmargin=1em,
+    xrightmargin=1em
+}
+
+% Para archivo externo
+\newcommand{\matlabfile}[2][]{%
+  \lstinputlisting[style=matlabstyle,caption={#1}]{#2}%
+}
+
+% Definir entornos
+\lstnewenvironment{matlabcode}
+  {\lstset{style=matlabstyle}}
+  {}
+
+\lstnewenvironment{matlaboutput}
+  {\lstset{style=outputstyle}}
+  {}

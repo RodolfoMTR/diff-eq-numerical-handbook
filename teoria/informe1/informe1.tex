@@ -1,6 +1,4 @@
-El objetivo de este informe es mostrar cómo graficar la solución de una ecuación diferencial ordinaria (EDO) utilizando Matlab/Octave. Para ello, se resolverá una EDO específica y se graficará su solución junto con algunos puntos evaluados en la misma.
-
-\textbf{Problema a Resolver:}
+El objetivo de esta sección es mostrar cómo graficar la solución de una ecuación diferencial ordinaria (EDO) utilizando Matlab/Octave. Para ello, se resolverá una EDO específica y se graficará su solución junto con algunos puntos evaluados en la misma. Sea la EDO con condición inicial
 \begin{equation}
 y'+2y=x\quad ,\, y(0)=0\quad x\in[0,1]
 \end{equation}
@@ -8,25 +6,24 @@ La solución de la ecuación diferencial es
 \begin{equation}
 y=\frac{2x-1}{4}+\frac{e^{-2x}}{4}
 \end{equation}
-Queremos encontrar los valores en $y(1),\,y(1/2)\,,y(\pi/4)$, de ahí, graficar junto a la solución en \textbf{Matlab/octave}. Para ese creamos el siguiente programa:
+Queremos encontrar los valores en $y(1),\,y(1/2)\,,y(\pi/4)$, de ahí, graficar junto a la solución $y$ en \textbf{Matlab/octave}.Creamos el siguiente script y lo guadadamos con el nombre que guste:
 \begin{matlabcode}
-y = @(x) (2*x-1)/4+exp(-2*x)/4; %definimos la función solución de la EDO
-% evaluamos la función en los puntos deseados
+y = @(x) (2*x-1)/4+exp(-2*x)/4; %definimos como funcion solucion de la EDO
+% evaluamos la funcion en los puntos deseados
 y(1)
 y(1/2)
 y(pi/4)
+%GRAFICA
+x=0:0.01:1; %dominio de la solucion y el paso h=0.01
+plot(x,y(x),1,y(1),'ro',1/2,y(1/2),'ro',pi/4,y(pi/4),'ro')
 \end{matlabcode}
-Guardamos el programa con el nombre de su preferencia y lo ejecutamos, nos da el siguiente resultado en consola.
+Ejecutamos el script, y nos debe dar el siguiente resultado
 \begin{matlaboutput}
     ans = 0.2838
     ans = 0.091970
     ans = 0.1947    
 \end{matlaboutput}
-Graficamos la solución en el intervalo $[0,1]$ con los puntos calculados, para eso abajo del codigo del último programa escribimos estas dos lineas de codigo, las cuales al ejecutar el programa nos devolvera la siguiente gráfica.
-\begin{matlabcode}
-x=0:0.01:1;
-plot(x,y(x),1,y(1),'ro',1/2,y(1/2),'ro',pi/4,y(pi/4),'ro')
-\end{matlabcode}
+con la gráfica en el intervalo $[0,1]$ con los puntos calculados
 \begin{figure}[ht]
 \centering
 \includegraphics[width=7cm]{figure_0.pdf}

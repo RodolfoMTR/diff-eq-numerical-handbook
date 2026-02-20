@@ -5,8 +5,43 @@ Se supone que la EDO tiene la forma general:
 y'' + p(x)y' + q(x)y = r(x), \quad y(0) = 0,\ y(1) = 1
 \]
 y que el dominio \([0,1]\) se ha discretizado con \( n = 4 \) puntos (3 nodos interiores).
+\[
+A = \begin{bmatrix}
+2 + h^2 q(x_1) & -1 + \frac{h}{2} p(x_1) & 0 & \dots & \dots & \dots & 0 \\
+-1 - \frac{h}{2} p(x_2) & 2 + h^2 q(x_2) & -1 + \frac{h}{2} p(x_2) & & & & \vdots \\
+0 & \ddots & \ddots & \ddots & & & \vdots \\
+\vdots & & \ddots & \ddots & \ddots & & 0 \\
+\vdots & & & \ddots & \ddots & \ddots & -1 + \frac{h}{2} p(x_{N-1}) \\
+0 & \dots & \dots & \dots & 0 & -1 - \frac{h}{2} p(x_N) & 2 + h^2 q(x_N)
+\end{bmatrix} ,
+\]
+\[
+\mathbf{w} = \begin{bmatrix}
+w_1 \\
+w_2 \\
+\vdots \\
+w_{N-1} \\
+w_N
+\end{bmatrix}, \quad \text{y} \quad \mathbf{b} = \begin{bmatrix}
+-h^2 r(x_1) + \left( 1 + \frac{h}{2} p(x_1) \right) w_0 \\
+-h^2 r(x_2) \\
+\vdots \\
+-h^2 r(x_{N-1}) \\
+-h^2 r(x_N) + \left( 1 - \frac{h}{2} p(x_N) \right) w_{N+1}
+\end{bmatrix}
+\]
+\textbf{Ejemplo:} resolver el problema de valor inicial
+\[
+y''+3y'+2y=r(x)\quad y(0)=0\quad y(1)=1\quad 0\leq x\leq1
+\] 
+\textbf{Solución}
+para $N=4$,  $h=\frac{1-0}{4}=1/4$, luego
+\begin{align*}
+	x_0 && x_1 && x_2 && x_3 && x_4\\
+	0 && 1/4 && 1/2 && 3/4 && 1
+\end{align*}
+y $p(x)=3$, $q(x)=2$, $r(x)=$, de ahí, $p(x_{i})=3$ y $q(x_{i})=2$ para $i=1:N$
 
----
 
 \textbf{Variables:}
 
